@@ -1,0 +1,52 @@
+.main-puzzles-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+  height: 400px;
+  flex: 1;
+}
+
+.puzzle-content-wrapper {
+  display: flex;
+  background-color: #b7c0d8;
+  border-radius: 40px;
+  padding: 35px;
+  width: 85%;
+  box-shadow: 5px 5px 17px 2px rgba(0, 0, 0, 0.36);
+  justify-content: space-around;
+}
+
+.text-button-puzzle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.text-button-puzzle-wrapper h1 {
+  font-size: 3.4em;
+}
+
+.hikaru-text-wrapper {
+  display: flex;
+  justify-tracks: center;
+  width: 80%;
+  gap: 20px;
+}
+
+.hikaru-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.hikaru-text h3 {
+  font-size: 1em;
+  text-align: center;
+}
+
+.hikaru-text p {
+  text-align: center;
+}

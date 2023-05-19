@@ -1,0 +1,6 @@
+.history-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: #e8edf9;
+  height: 200vh;
+}

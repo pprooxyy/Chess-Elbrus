@@ -1,0 +1,39 @@
+.main-play-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+  height: 400px;
+  flex: 1;
+}
+
+.button-19.play-bot,
+.button-19.play-online,
+.button-19.solve-puzzle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 30px;
+}
+
+.button-19.play-bot .button-text-wrapper,
+.button-19.play-online .button-text-wrapper,
+.button-19.solve-puzzle .button-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.button-19.play-bot h2,
+.button-19.play-online h2,
+.button-19.solve-puzzle h2 {
+  font-size: 1.4em;
+  text-transform: none;
+}
+
+.button-19.play-bot p,
+.button-19.play-online p {
+  font-size: 0.6em;
+  text-transform: none;
+}
