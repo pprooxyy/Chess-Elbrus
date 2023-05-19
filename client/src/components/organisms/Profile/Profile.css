@@ -1,0 +1,13 @@
+.profileChangeName {
+  align-items: center;
+}
+
+.btn-pencil {
+  border: none;
+  width: 20px;
+}
+
+.btn-pencil:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}

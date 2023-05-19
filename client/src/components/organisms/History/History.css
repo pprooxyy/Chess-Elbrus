@@ -1,0 +1,27 @@
+.history-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1;
+  margin-left: 200px;
+  padding: 20px;
+  border-top: 1px solid #b7c0d8;
+}
+
+.history-title {
+  text-align: center;
+  font-size: 50px;
+  padding: 20px 0 30px 200px;
+  margin: 0;
+}
+
+.board-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-png {
+  width: 175px;
+  height: 175px;
+}

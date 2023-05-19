@@ -1,0 +1,36 @@
+.lider-table {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 20px 200px;
+}
+
+.top-10-players-table {
+  width: 70%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.top-10-players-table caption {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.top-10-players-table th {
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
+.top-10-players-table td,
+.top-10-players-table th {
+  padding: 8px;
+}
+
+.top-10-players-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.top-10-players-table tr:hover {
+  background-color: #e6e6e6;
+}
