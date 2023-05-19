@@ -1,35 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import "./Friends.css";
-import Button from "../../atoms/Button/Button";
 
-function Friends() {
+interface Friend {
+  id: number;
+  name: string;
+}
+
+const Friends: React.FC = () => {
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [newFriendName, setNewFriendName] = useState<string>('');
+
+  useEffect(() => {
+    fetchFriends();
+  }, []);
+
+  const fetchFriends = async (): Promise<void> => {
+    try {
+      const response = await fetch('http://localhost:3001/friends', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFriends(data);
+      } else {
+        console.error('Failed to fetch friends:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Failed to fetch friends:', error);
+    }
+  };
+
+  const addFriend = async (): Promise<void> => {
+    try {
+      const response = await fetch('http://localhost:3001/friends', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newFriendName }),
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        setNewFriendName('');
+        fetchFriends();
+      } else {
+        console.error('Failed to add friend:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Failed to add friend:', error);
+    }
+  };
+
+  const deleteFriend = async (friendId: number): Promise<void> => {
+    try {
+      const response = await fetch(`http://localhost:3001/friends/${friendId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        fetchFriends();
+      } else {
+        console.error('Failed to delete friend:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Failed to delete friend:', error);
+    }
+  };
+
   return (
-    <div className="main-container">
-      <div className="mainFriendContainer">
-        <h1 className="title-friends">Friends</h1>
-        <h3 className="text-title-h3">Игры онлайн</h3>
-        <div>
-          <div className="flexLook">
-            <div className="FriendVsFriend">Nick vs Petiya</div>
-            {"_"}
-            <div>
-              <Button text="Look this game" />
-            </div>
-          </div>
-        </div>
-        <h3 className="text-title-h3">Отправить вызов другу</h3>
-        <div className="flexLook">
-          <div className="FriendVsFriend">Nick</div>
-          <div>
-            <Button text={"send invite"} height="40px" width="200px" />
-          </div>
-          <div>
-            <Button text={"Generate Invite Link"} width="290px" />
-          </div>
-        </div>
+    <div className="friends-container">
+      <h2>Friends</h2>
+
+      <ul className="friend-list">
+        {friends.map((friend) => (
+          <li key={friend.id} className="friend-item">
+            <a href={`/profile/${friend.id}`} className="friend-name">{friend.name}</a>
+            <button onClick={() => deleteFriend(friend.id)} className="delete-button">Delete</button>
+          </li>
+        ))}
+      </ul>
+
+      <div className="add-friend">
+        <h3>Add Friend</h3>
+        <input
+          type="text"
+          value={newFriendName}
+          onChange={(e) => setNewFriendName(e.target.value)}
+          placeholder="Enter friend's name"
+          className="friend-input"
+        />
+        <button onClick={addFriend} className="add-button">Add</button>
       </div>
     </div>
   );
-}
+};
 
 export default Friends;
