@@ -15,14 +15,14 @@ router.post("/register", async (req, res) => {
     defaults: {
       user_name,
       user_password: hashPass,
-      user_avatar: "./assets/avatars/default.png",
+      user_avatar: "/assets/avatars/default.png",
       user_rating: 0,
     },
   });
   console.log(newUser);
   if (newUser[1]) {
     req.session.user = {
-      user_id: newUser[0].dataValues.id,
+      id: newUser[0].dataValues.id,
       user_name: newUser[0].dataValues.user_name,
       user_rating: newUser[0].dataValues.user_rating,
       user_avatar: newUser[0].dataValues.user_avatar,
@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
     res.json({
       msg: "User registered successfully",
       user: {
-        user_id: newUser[0].dataValues.id,
+        id: newUser[0].dataValues.id,
         user_name: newUser[0].dataValues.user_name,
         user_rating: newUser[0].dataValues.user_rating,
         user_avatar: newUser[0].dataValues.user_avatar,
@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
     const passCheck = await bcrypt.compare(user_password, user.user_password);
     if (passCheck) {
       req.session.user = {
-        user_id: user.dataValues.id,
+        id: user.dataValues.id,
         user_name: user.dataValues.user_name,
         user_rating: user.dataValues.user_rating,
         user_avatar: user.dataValues.user_avatar,
@@ -61,7 +61,7 @@ router.post("/login", async (req, res) => {
       res.json({
         msg: "Success",
         user: {
-          user_id: user.dataValues.id,
+          id: user.dataValues.id,
           user_name: user.dataValues.user_name,
           user_rating: user.dataValues.user_rating,
           user_avatar: user.dataValues.user_avatar,

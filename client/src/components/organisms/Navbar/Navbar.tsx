@@ -7,14 +7,13 @@ import { RootState } from "../../../redux/store";
 export default function Navbar() {
   const user = useSelector((state: RootState) => state.authSlicer.user);
   console.log(user);
-
   return (
     <div className="nav">
       <ul>
         <li className="">
           <img
             className="elbrus-logo"
-            src="./assets/navbar-icons/elbrus-logo.png"
+            src="/assets/navbar-icons/elbrus-logo.png"
             alt="elbrus-logo"
           />
         </li>
@@ -25,17 +24,17 @@ export default function Navbar() {
           <li className="nav-item">
             <img
               className="navbar-icon"
-              src="./assets/navbar-icons/king.png"
+              src="/assets/navbar-icons/king.png"
               alt="elbrus-logo"
             />
             Play
           </li>
         </Link>
-        <Link to="/profile">
+        <Link to={`/profile/${user.id}`}>
           <li className="nav-item">
             <img
               className="navbar-icon"
-              src="./assets/navbar-icons/queen.png"
+              src="/assets/navbar-icons/queen.png"
               alt="elbrus-logo"
             />
             Profile
@@ -45,7 +44,7 @@ export default function Navbar() {
           <li className="nav-item">
             <img
               className="navbar-icon"
-              src="./assets/navbar-icons/bishop.png"
+              src="/assets/navbar-icons/bishop.png"
               alt="elbrus-logo"
             />
             Leaderboard
@@ -55,7 +54,7 @@ export default function Navbar() {
           <li className="nav-item">
             <img
               className="navbar-icon"
-              src="./assets/navbar-icons/knight.png"
+              src="/assets/navbar-icons/knight.png"
               alt="elbrus-logo"
             />
             Social
@@ -65,7 +64,7 @@ export default function Navbar() {
           <li className="nav-item">
             <img
               className="navbar-icon"
-              src="./assets/navbar-icons/rook.png"
+              src="/assets/navbar-icons/rook.png"
               alt="elbrus-logo"
             />
             History
@@ -75,7 +74,7 @@ export default function Navbar() {
           <li className="nav-item log-out">
             <img
               className="navbar-icon"
-              src="./assets/navbar-icons/pawn.png"
+              src="/assets/navbar-icons/pawn.png"
               alt="elbrus-logo"
             />
             Logout
