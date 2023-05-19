@@ -2,8 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ILoginForm } from "../../../types";
 
 export const loginUser = createAsyncThunk(
-  'login/user',
-  async(user: ILoginForm) => {
+  "auth/loginUser",
+  async (user: ILoginForm) => {
     try {
       const response = await fetch("http://localhost:3001/auth/login", {
         method: "POST",
@@ -20,4 +20,4 @@ export const loginUser = createAsyncThunk(
       console.log(error);
     }
   }
-)
+);
