@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ILoginForm } from "../../../types";
-import "./LoginModal.css";
+import "./StartPageModalLogin.css";
 import { useAppDispatch } from "../../../redux/typesRedux";
 import { loginUser } from "../../../redux/thunk/auth/loginUser";
 import Button from "../../atoms/Button/Button";

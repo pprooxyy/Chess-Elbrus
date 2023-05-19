@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { IRegisterForm } from "../../../types";
-import "./RegisterModal.css";
 import { registerUser } from "../../../redux/thunk/auth/registerUser";
 import { useAppDispatch } from "../../../redux/typesRedux";
 import Button from "../../atoms/Button/Button";
+import "./StartPageModalRegister.css";
 
 const initialState: IRegisterForm = {
   user_name: "",

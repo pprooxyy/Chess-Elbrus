@@ -1,5 +1,5 @@
 import React from "react";
-import "./MainPuzzles.css";
+import "./MainPagePuzzles.css";
 import Button from "../../atoms/Button/Button";
 
 function MainPuzzles() {

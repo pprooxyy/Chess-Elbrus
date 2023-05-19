@@ -1,5 +1,5 @@
 import React from "react";
-import "./MainProfilePage.css";
+import "./Profile.css";
 import Button from "../../atoms/Button/Button";
 
 export default function MainProfilePage() {
