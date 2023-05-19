@@ -1,8 +1,13 @@
 import React from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 export default function Navbar() {
+  const user = useSelector((state: RootState) => state.authSlicer.user);
+  console.log(user);
+
   return (
     <div className="nav">
       <ul>

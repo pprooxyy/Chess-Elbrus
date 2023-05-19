@@ -4,6 +4,7 @@ import { registerUser } from "../../../redux/thunk/auth/registerUser";
 import { useAppDispatch } from "../../../redux/typesRedux";
 import Button from "../../atoms/Button/Button";
 import "./StartPageModalRegister.css";
+import { useNavigate } from "react-router";
 
 const initialState: IRegisterForm = {
   user_name: "",
@@ -23,6 +24,7 @@ export default function RegisterModal({
     React.Dispatch<React.SetStateAction<IRegisterForm>>
   ];
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const inputsChangeHandler = (
@@ -41,6 +43,7 @@ export default function RegisterModal({
     console.log("password:", inputValues.user_password);
     dispatch(registerUser(inputValues));
     setShowRegisterModal(false);
+    navigate("/home");
   };
 
   return (
