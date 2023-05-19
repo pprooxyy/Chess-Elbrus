@@ -16,7 +16,13 @@ const Friends: React.FC = () => {
 
   const fetchFriends = async (): Promise<void> => {
     try {
-      const response = await fetch('http://localhost:3001/friends');
+      const response = await fetch('http://localhost:3001/friends', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -36,9 +42,10 @@ const Friends: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ user_id: userId, friend_id: friendId }), // Replace userId and friendId with actual values
+        body: JSON.stringify({ name: newFriendName }),
+        credentials: "include"
       });
-  
+
       if (response.ok) {
         setNewFriendName('');
         fetchFriends();
@@ -54,6 +61,10 @@ const Friends: React.FC = () => {
     try {
       const response = await fetch(`http://localhost:3001/friends/${friendId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
       });
 
       if (response.ok) {
