@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../../atoms/Button/Button";
-import "./MainPlaySection.css";
+import "./MainPagePlaySection.css";
 
 function MainPlaySection() {
   const boardStyles = {
