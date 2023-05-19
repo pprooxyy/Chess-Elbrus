@@ -23,7 +23,7 @@ export default function MainProfilePage() {
                 <img alt="asdfa" src="./assets/profilePage/pencil.svg" />
               </button>
             </div>
-            <Button
+            {/* <Button
               text="Play Online"
               p="Play with someone from Elbrus"
               icon="/assets/browser.png"
@@ -38,7 +38,7 @@ export default function MainProfilePage() {
               width="250px"
               height="100px"
               className="play-online"
-            />
+            /> */}
           </div>
         </div>
       </div>

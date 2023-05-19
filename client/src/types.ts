@@ -17,12 +17,15 @@ export interface IUserRedux {
   id: number;
   user_name: string;
   user_rating: number;
+  user_avatar: string;
 }
 
 export interface IAuthState {
   user: IUserRedux;
-  loading: boolean;
+  isAuthenticated: boolean;
+  isLoading: boolean;
   error: string | null | undefined;
+  msg: string;
 }
 
 export interface ILoginState {
