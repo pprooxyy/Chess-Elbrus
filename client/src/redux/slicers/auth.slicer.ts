@@ -3,6 +3,7 @@ import { IAuthState } from "../../types";
 import { getUser } from "../thunk/auth/getUser";
 import { registerUser } from "../thunk/auth/registerUser";
 import { loginUser } from "../thunk/auth/loginUser";
+import { editUser } from "../thunk/auth/editUser";
 
 const initialUser = {
   id: 0,
@@ -78,6 +79,19 @@ const authSlicer = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.user = initialUser;
         state.isAuthenticated = false;
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(editUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        // state.user = action.payload;
         state.isLoading = false;
         state.error = action.error.message;
       });

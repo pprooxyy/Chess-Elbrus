@@ -11,6 +11,16 @@ export interface ILoginForm {
   user_password: string;
 }
 
+//todo PrpfilePage
+
+export type EditNameFormProps = {
+  setEditName: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export interface IEditNameForm {
+  user_name: string;
+}
+
 //todo Redux
 
 //? authSlicer

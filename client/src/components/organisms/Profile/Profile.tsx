@@ -1,18 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import Button from "../../atoms/Button/Button";
 import { RootState } from "../../../redux/store";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUserGames } from "../../../redux/thunk/profile/getUserGames";
+import EditNameForm from "../../atoms/EditNameForm/EditNameForm";
 
 export default function MainProfilePage() {
   const borderSize = { width: 50, height: 50 }; //! what is it, Dima?
 
+  //todo получение статистики игр
+
   const { id } = useParams();
-  // console.log("id: ", id);
   const userId = Number(id);
-  // console.log("profileId: ", userId);
   const user = useAppSelector((state: RootState) => state.authSlicer.user);
 
   const dispatch = useAppDispatch();
@@ -27,8 +28,13 @@ export default function MainProfilePage() {
   const userStats = useAppSelector(
     (state: RootState) => state.profileSlicer.userStats
   );
-  // console.log(">>>", userGames);
-  // console.log(">>>", userStats);
+
+  //todo редактирование имени пользователя
+
+  const [editName, setEditName] = useState(false) as [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ];
 
   return (
     <>
@@ -46,11 +52,19 @@ export default function MainProfilePage() {
           </div>
           <div className="profileSubDiv">
             <div className="profileChangeName">
-              <h2>{user.user_name}</h2>
-
-              <button className="btn-pencil">
-                <img alt="1111" src="/assets/profilePage/pencil.svg" />
-              </button>
+              {editName ? (
+                <EditNameForm setEditName={setEditName} />
+              ) : (
+                <>
+                  <h2>{user.user_name}</h2>
+                  <button
+                    className="btn-pencil"
+                    onClick={() => setEditName(true)}
+                  >
+                    <img alt="1111" src="/assets/profilePage/pencil.svg" />
+                  </button>
+                </>
+              )}
             </div>
             {/* <Button
               text="Play Online"

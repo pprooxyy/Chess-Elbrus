@@ -1,19 +1,19 @@
 const router = require("express").Router();
-const { Game } = require("../../db/models");
-const { Op } = require("sequelize");
+const { Game, User } = require("../../db/models");
+const { Op, where } = require("sequelize");
 
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const userId = Number(id);
-    console.log("ID FROM PARAMS: ", userId);
+    // console.log("ID FROM PARAMS: ", userId);
     const userGames = await Game.findAll({
       where: {
         [Op.or]: [{ game_player1_id: userId }, { game_player2_id: userId }],
       },
       raw: true,
     });
-    console.log("^^^^^^^^^^", userGames);
+    // console.log("^^^^^^^^^^", userGames);
     const userStats = {
       total: 0,
       wins: 0,
@@ -36,12 +36,41 @@ router.get("/:id", async (req, res) => {
       const durationInMinutes = Math.floor(duration / 1000 / 60);
       userStats.totalDuration += durationInMinutes;
     });
-    console.log("USERSTATS: ", userStats);
+    // console.log("USERSTATS: ", userStats);
 
     res.json({ userGames, userStats });
   } catch (error) {
     console.log(error);
     res.send(error);
+  }
+});
+
+router.put("/", async (req, res) => {
+  const { newName, newPic } = req.body;
+  const id = req.session.user.id;
+  console.log("------->", id);
+  try {
+    if (newName !== "") {
+      await User.update({ user_name: newName }, { where: { id }, raw: true });
+    }
+    if (newPic !== "") {
+      await User.update({ user_avatar: newPic }, { where: { id }, raw: true });
+    }
+
+    // Получение обновленных данных пользователя
+    const editedUser = await User.findByPk(id);
+    console.log(editedUser);
+    const data = {
+      id: editedUser.id,
+      user_name: editedUser.user_name,
+      user_rating: editedUser.user_rating,
+      user_avatar: editedUser.user_avatar,
+    };
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to update user" });
   }
 });
 
