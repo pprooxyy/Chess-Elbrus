@@ -6,10 +6,10 @@ type EdituserThunkProps = {
 };
 
 export const editUser = createAsyncThunk(
-  "profile/edituser",
+  "auth/profile/editUser",
   async (editedUserInfo: EdituserThunkProps) => {
     try {
-      console.log("===>", editedUserInfo);
+      // console.log("===>", editedUserInfo);
       const response = await fetch("http://localhost:3001/profile", {
         method: "PUT",
         credentials: "include",

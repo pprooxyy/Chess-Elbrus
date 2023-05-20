@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUserGames } from "../../../redux/thunk/profile/getUserGames";
 import EditNameForm from "../../atoms/EditNameForm/EditNameForm";
+import EditAvatarModal from "../../molecules/EditAvatarModal/EditAvatarModal";
 
 export default function MainProfilePage() {
   const borderSize = { width: 50, height: 50 }; //! what is it, Dima?
@@ -36,6 +37,13 @@ export default function MainProfilePage() {
     React.Dispatch<React.SetStateAction<boolean>>
   ];
 
+  //todo редактирование аватара пользователя (выбор из предложенных)
+
+  const [editPic, setEditPic] = useState(false) as [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ];
+
   return (
     <>
       <div className="main-profile-container">
@@ -48,7 +56,9 @@ export default function MainProfilePage() {
               alt="avatar"
               style={{ width: "150px" }}
             />
-            <Button text="Change Avatar" height="50px" />
+            <button className="btn-pencil" onClick={() => setEditPic(true)}>
+              <img alt="1111" src="/assets/profilePage/photo-editor-icon.svg" />
+            </button>
           </div>
           <div className="profileSubDiv">
             <div className="profileChangeName">
@@ -100,6 +110,7 @@ export default function MainProfilePage() {
           className="play-online"
         />
       </div>
+      {editPic && <EditAvatarModal setEditPic={setEditPic} />}
     </>
   );
 }
