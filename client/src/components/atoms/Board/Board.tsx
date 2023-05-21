@@ -120,7 +120,11 @@ function Board() {
   };
 
   const handleMove = async ({ sourceSquare, targetSquare }: any) => {
+    console.log("SOURCE SQUARE", sourceSquare);
+    console.log("TARGET SQUARE", targetSquare);
+
     console.log("FIRST BOARD WHEN MOVING PIECE", chess.ascii());
+    console.log("POSSIBLE MOVES", chess.moves());
 
     try {
       const response = await dispatch(getUser());
@@ -135,6 +139,7 @@ function Board() {
         if (chess.move(currentMove)) {
           setPosition(chess.fen());
           console.log("AFTER MOVE FOR USER THAT MOVED", chess.ascii());
+          console.log("POSSIBLE MOVES", chess.moves());
 
           socket.emit(
             "move",

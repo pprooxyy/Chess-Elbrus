@@ -54,20 +54,17 @@ class Game {
 
   makeMove(currentPosition, nextMove) {
     console.log("FIRST BOARD POSITION ON SERVER", this.game.ascii());
+    console.log("POSSIBLE MOVES", this.game.moves());
     console.log(currentPosition);
     console.log(this.game.fen());
     if (currentPosition === this.game.fen()) {
       // this.game.load(currentPosition);
+      this.game.move(nextMove);
       console.log("FEN OF GAME AFTER MOVE", this.game.fen());
       console.log("POSITION AFTER MOVE", this.game.ascii());
+      console.log("POSSIBLE MOVES", this.game.moves());
       console.log("NEXT MOVE", nextMove);
-      if (!this.game.move(nextMove)) {
-        return "invalid move";
-      } else {
-        this.game.move(nextMove);
-        console.log("POSITION AFTER MOVE()", this.game.ascii());
-        return this.game.fen();
-      }
+      return this.game.fen();
     }
   }
 
