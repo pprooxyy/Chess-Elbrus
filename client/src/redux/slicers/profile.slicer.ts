@@ -2,6 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IProfileState } from "../../types";
 import { getUserGames } from "../thunk/profile/getUserGames";
 
+const initialProfileOwner = {
+  id: 0,
+  user_name: "",
+  user_rating: 0,
+  user_avatar: "",
+};
+
 const initialUserStats = {
   total: 0,
   wins: 0,
@@ -11,6 +18,7 @@ const initialUserStats = {
 };
 
 const initialState: IProfileState = {
+  profileOwner: initialProfileOwner,
   userGames: [],
   userStats: initialUserStats,
   isLoading: false,
@@ -20,19 +28,25 @@ const initialState: IProfileState = {
 const profileSlicer = createSlice({
   name: "profile",
   initialState,
-  reducers: {},
+  reducers: {
+    setProfileOwner(state, action) {
+      state.profileOwner = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUserGames.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getUserGames.fulfilled, (state, action) => {
+        state.profileOwner = action.payload.profileOwner;
         state.userGames = action.payload.userGames;
         state.userStats = action.payload.userStats;
         state.isLoading = false;
         state.error = null;
       })
       .addCase(getUserGames.rejected, (state, action) => {
+        state.profileOwner = initialProfileOwner;
         state.userGames = [];
         state.userStats = initialUserStats;
         state.isLoading = false;
@@ -41,4 +55,5 @@ const profileSlicer = createSlice({
   },
 });
 
+export const { setProfileOwner } = profileSlicer.actions;
 export default profileSlicer.reducer;

@@ -12,6 +12,10 @@
 }
 
 .modal-avatar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   width: 350px;
   height: 300px;
   background-color: #f4f7fa;
@@ -20,12 +24,34 @@
 }
 
 .profile-btn-img {
-  width: 75px;
+  width: 90px;
+}
+
+.profile-btn-img:hover {
+  scale: 1.1;
+  transition: font-size 0.5s ease;
 }
 
 .profile-btn-change-avatar {
-  width: 85px;
-  height: 85px;
+  width: 100px;
+  height: 100px;
   padding: 3px;
+  margin: 7px;
   background-color: #f4f7fa;
+  border: none;
+}
+
+.noImg-btn {
+  cursor: pointer;
+  background-color: #f4f7fa;
+  margin: 5px;
+  padding: 3px;
+  height: 30px;
+  width: 30px;
+  border: none;
+}
+
+.noImg-btn:hover {
+  scale: 1.1;
+  transition: font-size 0.3s ease;
 }

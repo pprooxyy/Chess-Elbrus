@@ -5,5 +5,6 @@ export const getUser = createAsyncThunk("user/getUser", async () => {
     credentials: "include",
   });
   const user = await response.json();
+  console.log("user from getUser thunk: ", user);
   return user;
 });

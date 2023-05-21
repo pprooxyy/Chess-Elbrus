@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useAppDispatch } from "../../../redux/typesRedux";
+import { getUser } from "../../../redux/thunk/auth/getUser";
 
 export default function Navbar() {
+  const dispatch = useAppDispatch();
+
+  //todo через thunk навбар обращается к серверу и получает юзера,
+  //todo который лежит в сессии и кладёт его в стейт
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
+  //todo достаёт юзера из стейта
   const user = useSelector((state: RootState) => state.authSlicer.user);
-  console.log(user);
+  console.log("user from Navbar: ", user);
+
   return (
     <div className="nav">
       <ul>

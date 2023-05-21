@@ -7,25 +7,34 @@ import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUserGames } from "../../../redux/thunk/profile/getUserGames";
 import EditNameForm from "../../atoms/EditNameForm/EditNameForm";
 import EditAvatarModal from "../../molecules/EditAvatarModal/EditAvatarModal";
+import { setProfileOwner } from "../../../redux/slicers/profile.slicer";
 
 export default function MainProfilePage() {
-  const borderSize = { width: 50, height: 50 }; //! what is it, Dima?
-
-  //todo получение статистики игр
-
   const { id } = useParams();
-  const userId = Number(id);
+  const profileOwnerId = Number(id);
+
+  //todo пользователь из стейта (тот, кто залогинен)
   const user = useAppSelector((state: RootState) => state.authSlicer.user);
 
   const dispatch = useAppDispatch();
 
+  //todo достаём с сервера статистику игр юзера (хозяина профиля) + самого хозяина
   useEffect(() => {
-    dispatch(getUserGames(userId));
-  }, []);
+    dispatch(getUserGames(profileOwnerId));
+  }, [dispatch, profileOwnerId]);
 
+  //todo достаём из стейта profileSlicer хозяина профила (profileOwner)
+  const profileOwner = useAppSelector(
+    (state: RootState) => state.profileSlicer.profileOwner
+  );
+  console.log("profileOwner из профиля польз: ", profileOwner);
+
+  //todo тут массив объектов всех игр юзера (пока не используется)
   const userGames = useAppSelector(
     (state: RootState) => state.profileSlicer.userGames
   );
+
+  //todo объект со статистикой игр юзера
   const userStats = useAppSelector(
     (state: RootState) => state.profileSlicer.userStats
   );
@@ -44,6 +53,11 @@ export default function MainProfilePage() {
     React.Dispatch<React.SetStateAction<boolean>>
   ];
 
+  //todo обновление стейта profileOwner, если обновился user (при редактировании)
+  if (user.id === profileOwner.id) {
+    dispatch(setProfileOwner(user));
+  }
+
   return (
     <>
       <div className="main-profile-container">
@@ -52,13 +66,19 @@ export default function MainProfilePage() {
           <div className="profileSubDiv">
             <img
               id="profileImage"
-              src={user.user_avatar}
+              src={profileOwner.user_avatar}
               alt="avatar"
-              style={{ width: "150px" }}
             />
-            <button className="btn-pencil" onClick={() => setEditPic(true)}>
-              <img alt="1111" src="/assets/profilePage/photo-editor-icon.svg" />
-            </button>
+            {user.id === profileOwner.id ? (
+              <button
+                className="btn-edit-user"
+                onClick={() => setEditPic(true)}
+              >
+                <img alt="1111" src="/assets/profilePage/photo-edit-icon.svg" />
+              </button>
+            ) : (
+              ""
+            )}
           </div>
           <div className="profileSubDiv">
             <div className="profileChangeName">
@@ -66,49 +86,49 @@ export default function MainProfilePage() {
                 <EditNameForm setEditName={setEditName} />
               ) : (
                 <>
-                  <h2>{user.user_name}</h2>
-                  <button
-                    className="btn-pencil"
-                    onClick={() => setEditName(true)}
-                  >
-                    <img alt="1111" src="/assets/profilePage/pencil.svg" />
-                  </button>
+                  <h2 id="user-name">
+                    {user.user_name}
+                    {user.id === profileOwner.id ? (
+                      <button
+                        className="btn-edit-user"
+                        onClick={() => setEditName(true)}
+                      >
+                        <img
+                          alt="editName"
+                          src="/assets/profilePage/pencil-icon.svg"
+                          style={{ scale: "0.6" }}
+                        />
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </h2>
                 </>
               )}
             </div>
-            {/* <Button
-              text="Play Online"
-              p="Play with someone from Elbrus"
-              icon="/assets/browser.png"
-              width="250px"
-              height="100px"
-              className="play-online"
-            />
-            <Button
-              text="Play with Bot"
-              p="Play with the smartes AI"
-              icon="/assets/browser.png"
-              width="250px"
-              height="100px"
-              className="play-online"
-            /> */}
-            <p>Rating: {user.user_rating}</p>
-            <p>Total games: {userStats.total}</p>
-            <p>Wins: {userStats.wins}</p>
-            <p>Losses: {userStats.losses}</p>
-            <p>Draws: {userStats.draws}</p>
-            <p>Total time: {userStats.totalDuration}</p>
+
+            <p id="user-rating">Rating: {profileOwner.user_rating}</p>
+            <div className="statsDiv">
+              <p>
+                <b>Game statistics:</b>
+              </p>
+              <p>Total games: {userStats.total}</p>
+              <p>Wins: {userStats.wins}</p>
+              <p>Losses: {userStats.losses}</p>
+              <p>Draws: {userStats.draws}</p>
+              <p>Total time: {userStats.totalDuration} min</p>
+            </div>
           </div>
         </div>
       </div>
       <div className="buttonHistory">
-        <Button
+        {/* <Button
           text="History of the last games"
           icon="/assets/browser.png"
           width="360px"
           height="100px"
           className="play-online"
-        />
+        /> */}
       </div>
       {editPic && <EditAvatarModal setEditPic={setEditPic} />}
     </>

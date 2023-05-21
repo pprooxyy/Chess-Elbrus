@@ -80,10 +80,20 @@ export default function EditAvatarModal({ setEditPic }: EditAvatarModalProps) {
             alt="1"
           />
         </button>
-        <button onClick={() => changeAvatarHandler("default")}>
-          Delete avatar
+        <button
+          className="noImg-btn"
+          onClick={() => changeAvatarHandler("default")}
+        >
+          <img
+            alt="delete"
+            src="/assets/profilePage/recycle-bin-line-icon.svg"
+            style={{ scale: "0.66" }}
+          />
         </button>
-        <button onClick={() => setEditPic(false)}>Cancel</button>
+
+        <button className="noImg-btn" onClick={() => setEditPic(false)}>
+          <img alt="cancel" src="/assets/profilePage/cancel-icon.svg" />
+        </button>
       </div>
     </div>
   );

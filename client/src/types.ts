@@ -11,7 +11,7 @@ export interface ILoginForm {
   user_password: string;
 }
 
-//todo PrpfilePage
+//todo ProfilePage
 
 export type EditNameFormProps = {
   setEditName: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,6 +70,7 @@ export interface IGameStats {
 }
 
 export interface IProfileState {
+  profileOwner: IUserRedux;
   userGames: IGame[];
   userStats: IGameStats;
   isLoading: boolean;

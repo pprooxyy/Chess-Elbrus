@@ -37,8 +37,12 @@ export default function EditNameForm({ setEditName }: EditNameFormProps) {
           setNewName({ ...newName, [e.target.name]: e.target.value })
         }
       />
-      <button>Apply</button>
-      <button onClick={() => setEditName(false)}>Cancel</button>
+      <button>
+        <img alt="apply" src="/assets/profilePage/apply-icon.svg" />
+      </button>
+      <button onClick={() => setEditName(false)}>
+        <img alt="cancel" src="/assets/profilePage/cancel-icon.svg" />
+      </button>
     </form>
   );
 }

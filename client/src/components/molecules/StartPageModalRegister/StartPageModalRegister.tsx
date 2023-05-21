@@ -37,10 +37,7 @@ export default function RegisterModal({
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Действия при отправке формы
-    console.log("Form submitted");
-    console.log("name:", inputValues.user_name);
-    console.log("email:", inputValues.user_email);
-    console.log("password:", inputValues.user_password);
+
     dispatch(registerUser(inputValues));
     setShowRegisterModal(false);
     navigate("/home");

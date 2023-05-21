@@ -32,10 +32,7 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Действия при отправке формы
-    console.log("Login form submitted");
-    console.log("email:", inputValues.user_email);
-    console.log("password:", inputValues.user_password);
+
     dispatch(loginUser(inputValues));
     setShowLoginModal(false);
     navigate("/home");
