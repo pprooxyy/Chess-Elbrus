@@ -5,8 +5,11 @@ const { Friend, User } = require("../../db/models");
 router.get("/", async (req, res) => {
     try {
         const userFriends = await Friend.findAll({
-            where: { user_id: req.session.user.user_id },
+            where: { user_id: req.session.user.id },
         });
+        if (userFriends.length === 0) {
+            return res.json([]);
+        }
         const users = await User.findAll({
             raw: "true"
         })
@@ -19,7 +22,8 @@ router.get("/", async (req, res) => {
             const user = map[userFriends[i].dataValues.friend_id];
             arr.push({
                 id: user.id,
-                name: user.user_name
+                name: user.user_name,
+                avatar: user.user_avatar
             })
         }
         res.json(arr);
@@ -31,7 +35,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const userId = req.session.user.user_id
+        const userId = req.session.user.id
         const { name } = req.body;
         const friend = await User.findOne({
             where: { user_name: name },
@@ -63,7 +67,7 @@ router.delete("/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
         const friend = await Friend.findOne({
-            where: { user_id: req.session.user.user_id, friend_id: user_id },
+            where: { user_id: req.session.user.id, friend_id: user_id },
         });
 
         if (!friend) {
