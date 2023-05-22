@@ -71,7 +71,7 @@ const authSlicer = createSlice({
         state.isLoading = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+        state.user = action.payload; //!
         state.isAuthenticated = true;
         state.isLoading = false;
         state.error = null;
