@@ -15,12 +15,12 @@ export const registerUser = createAsyncThunk(
         body: JSON.stringify(inputValues),
       });
       const result = await response.json();
-      localStorage.setItem("user", JSON.stringify(result.user));
+      //localStorage.setItem("user", JSON.stringify(result.user));
       //localStorage.setItem("userName", userName);
-      console.log("result from register thunk: ", result);
-      if (result.msg ===  "User registered successfully") {
-        dispatch(setAuthStatus(true)); // setAuthStatus is an action that updates isAuth in your Redux store
-      }
+      console.log("result from register thunk: ", result.msg);
+      // if (result.msg === "User registered successfully") {
+      //   dispatch(setAuthStatus(true)); // setAuthStatus is an action that updates isAuth in your Redux store
+      // }
       return result;
     } catch (error) {
       console.log(error);
