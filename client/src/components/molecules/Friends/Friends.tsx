@@ -12,6 +12,7 @@ interface Friend {
 const Friends: React.FC = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [newFriendName, setNewFriendName] = useState<string>('');
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     fetchFriends();
@@ -52,7 +53,14 @@ const Friends: React.FC = () => {
       if (response.ok) {
         setNewFriendName('');
         fetchFriends();
-      } else {
+      } else if (response.status === 404) {
+       setErrorMsg('Friend not found. Please check the username.');
+       
+       setTimeout(() => {
+        setErrorMsg('');
+      }, 3000);
+      }
+      else {
         console.error('Failed to add friend:', response.statusText);
       }
     } catch (error) {
@@ -80,36 +88,42 @@ const Friends: React.FC = () => {
     }
   };
 
+  const handleButtonClick = () => {
+    addFriend();
+    setNewFriendName('');
+  };
+
   return (
     <div className="friends-container">
       <h2 className='title-friend'>Friends</h2>
       <div className="puzzle-content-wrapper">
         <div className="add-friend">
-          <h3>Добавить друга</h3>
+          <h3>Add friends</h3>
           <input
             type="text"
             value={newFriendName}
             onChange={(e) => setNewFriendName(e.target.value)}
-            placeholder="Введите имя друга"
+            placeholder="Enter your friend name"
             className="friend-input"
           />
-          <button onClick={addFriend} className="add-button">Add</button>
+          <button onClick={handleButtonClick} className="add-button">Add</button>
         </div>
       </div>
+        {errorMsg && <p className="error-message">{errorMsg}</p>}
       {friends.length === 0 ? (
-        <p className='no-friend-list'>Список друзей пуст, добавьте друга по нику</p>
+        <p className='no-friend-list'>Friends list is empty, add a friend by nickname</p>
       ) : (
         <div className="friend-cards">
-        {friends.map((friend) => (
-          <Card key={friend.id} className="friend-card">
-            <Card.Img variant="top" src={friend.avatar} alt={friend.name} className='avatar'/>
-            <Card.Body>
-            <a href={`/profile/${friend.id}`} className="friend-name"><Card.Title>{friend.name}</Card.Title></a>
-              <Button variant="danger" onClick={() => deleteFriend(friend.id)} className="custom-button">Delete</Button>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>
+          {friends.map((friend) => (
+            <Card key={friend.id} className="friend-card">
+              <a href={`/profile/${friend.id}`} className="friend-name"><Card.Img variant="top" src={friend.avatar} alt={friend.name} className='avatar' /></a>
+              <Card.Body>
+                <a href={`/profile/${friend.id}`} className="friend-name"><Card.Title>{friend.name}</Card.Title></a>
+                <Button variant="danger" onClick={() => deleteFriend(friend.id)} className="custom-button">Delete</Button>
+              </Card.Body>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );
