@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
 router.put("/", async (req, res) => {
   const { newName, newPic } = req.body;
   const id = req.session.user.id;
-  console.log("------->", id);
+  // console.log("------->", id);
   try {
     if (newName !== "") {
       await User.update({ user_name: newName }, { where: { id }, raw: true });
@@ -81,10 +81,12 @@ router.put("/", async (req, res) => {
       user_avatar: editedUser.user_avatar,
     };
 
-    res.status(200).json(data);
+    req.session.user = data; //!
+
+    res.json(data);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Failed to update user" });
+    res.json({ error: "Failed to update user" });
   }
 });
 

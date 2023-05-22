@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -7,20 +7,12 @@ import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 export default function Navbar() {
-  const dispatch = useAppDispatch();
-
-  //todo через thunk навбар обращается к серверу и получает юзера,
-  //todo который лежит в сессии и кладёт его в стейт
-  // useEffect(() => {
-  //   dispatch(getUser());
-  // }, []);
-  const userID = useAppSelector(state => state.authSlicer.user.id)
   //todo достаёт юзера из стейта
-  //const user = useSelector((state: RootState) => state.authSlicer.user);
-  const user: any= localStorage.getItem("user")
-  const parsedUser = JSON.parse(user);
-  console.log((parsedUser), 'userId in NAV')
-  console.log("user from Navbar: ", user);
+  const user = useSelector((state: RootState) => state.authSlicer.user);
+  // const user: any = localStorage.getItem("user");
+  // const parsedUser = JSON.parse(user);
+  // console.log(parsedUser, "userId in NAV");
+  // console.log("user from Navbar: ", user);
 
   return (
     <div className="nav">
@@ -45,8 +37,7 @@ export default function Navbar() {
             Play
           </li>
         </Link>
-        <Link to={`/profile/${parsedUser.id}`}>
-
+        <Link to={`/profile/${user.id}`}>
           <li className="nav-item">
             <img
               className="navbar-icon"
@@ -86,6 +77,7 @@ export default function Navbar() {
             History
           </li>
         </Link>
+
         <Link to="/logout">
           <li className="nav-item log-out">
             <img
