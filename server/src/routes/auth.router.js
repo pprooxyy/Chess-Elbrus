@@ -15,18 +15,28 @@ router.post("/register", async (req, res) => {
     defaults: {
       user_name,
       user_password: hashPass,
-      user_avatar: "",
+      user_avatar: "/assets/avatars/default.png",
       user_rating: 0,
     },
   });
+  console.log(newUser);
   if (newUser[1]) {
     req.session.user = {
-      user_id: newUser[0].dataValues.id,
+      id: newUser[0].dataValues.id,
       user_name: newUser[0].dataValues.user_name,
       user_rating: newUser[0].dataValues.user_rating,
+      user_avatar: newUser[0].dataValues.user_avatar,
     };
     req.session.save();
-    res.json({ msg: "User registered successfully" });
+    res.json({
+      msg: "User registered successfully",
+      user: {
+        id: newUser[0].dataValues.id,
+        user_name: newUser[0].dataValues.user_name,
+        user_rating: newUser[0].dataValues.user_rating,
+        user_avatar: newUser[0].dataValues.user_avatar,
+      },
+    });
   } else {
     res.json({ msg: "User already exists" });
   }
@@ -38,15 +48,25 @@ router.post("/login", async (req, res) => {
     where: { user_email },
     plain: true,
   });
+  console.log(user);
   if (user) {
     const passCheck = await bcrypt.compare(user_password, user.user_password);
     if (passCheck) {
       req.session.user = {
-        user_id: user.dataValues.id,
+        id: user.dataValues.id,
         user_name: user.dataValues.user_name,
         user_rating: user.dataValues.user_rating,
+        user_avatar: user.dataValues.user_avatar,
       };
-      res.json({ msg: "Success" });
+      res.json({
+        msg: "Success",
+        user: {
+          id: user.dataValues.id,
+          user_name: user.dataValues.user_name,
+          user_rating: user.dataValues.user_rating,
+          user_avatar: user.dataValues.user_avatar,
+        },
+      });
     } else {
       res.json({ msg: "Wrong password" });
     }

@@ -18,23 +18,22 @@ export default function StartPage() {
             src="./assets/startPage/purplePieces.png"
             alt="purplePieces"
           />
-          <div>
-            <div id="button-container">
-              <Button
-                text="Login"
-                width="150px"
-                height="60px"
-                onClick={() => setShowLoginModal(true)}
-              />
-              <Button
-                text="Register"
-                width="150px"
-                height="60px"
-                onClick={() => setShowRegisterModal(true)}
-              />
-              <div id="signInDiv"></div>
-            </div>
+          {/* <div> */}
+          <div id="button-container">
+            <Button
+              text="Login"
+              width="150px"
+              height="60px"
+              onClick={() => setShowLoginModal(true)}
+            />
+            <Button
+              text="Register"
+              width="150px"
+              height="60px"
+              onClick={() => setShowRegisterModal(true)}
+            />
           </div>
+          {/* </div> */}
         </div>
 
         <img

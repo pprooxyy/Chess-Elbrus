@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
-import io from "socket.io-client";
 import { useAppDispatch } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
-const socket = io("http://localhost:3002");
-
-function Board() {
+function Board({ socket }: any) {
   const [chess, setChess] = useState(new Chess());
   const [room, setRoom]: any = useState("");
   const [position, setPosition]: any = useState(
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   );
   const [isPlayersMove, setIsPlayersMove]: any = useState(false);
+  const [playerColor, setPlayerColor]: any = useState("white");
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     console.log("MOOVE", isPlayersMove);
-    console.log(chess.fen());
+    console.log(chess);
 
     socket.on("connect", async () => {
       const storageUserId = localStorage.getItem("userId");
@@ -35,6 +33,8 @@ function Board() {
             console.log("lala");
 
             console.log("SUCCES", onSuccess);
+            console.log(onSuccess.storageRoomId);
+
             // setRoom(onSuccess[1]);
             // chess.load(onSuccess.fen);
             // setPlayerColor(onSuccess.color === "w" ? "white" : "black");
@@ -47,7 +47,19 @@ function Board() {
       }
     });
 
-    socket.on("move", (nextPosition, move) => {
+    socket.on("reconnect", (roomObject: any) => {
+      const storageRoomId: any = localStorage.getItem("roomId");
+      console.log(roomObject);
+      console.log(storageRoomId);
+
+      setChess(roomObject[storageRoomId]);
+      console.log("CHESS AFTER SETCHES", chess);
+
+      // setPosition(chess.fen());
+      console.log("ROOM OBJECT", roomObject);
+    });
+
+    socket.on("move", (nextPosition: any, move: any) => {
       console.log("meme");
 
       console.log(
@@ -70,21 +82,26 @@ function Board() {
     //   socket.off("room-updated");
     //   socket.off("move");
     // };
-  }, [chess, isPlayersMove, position]);
+  }, [chess, isPlayersMove, position, socket]);
 
   const handleCreateRoom = async () => {
     try {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
       const userId = response.payload.user_id;
+      const userName = response.payload.user_name;
+
       socket.emit(
         "create-room",
         userFromBack,
         (currentRoomID: any, firstMoveCheck: any) => {
           console.log(currentRoomID);
+          firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
 
           localStorage.setItem("roomId", currentRoomID);
           localStorage.setItem("userId", userId);
+          localStorage.setItem("userName", userName);
+
           setRoom(currentRoomID);
           setIsPlayersMove(firstMoveCheck);
           // const isFirstMove = createdRoom.player1.color === "w";
@@ -100,7 +117,12 @@ function Board() {
     try {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
-      const roomId = prompt("Enter room ID:");
+      const userName = response.payload.user_name;
+      const userId = response.payload.user_id;
+      const roomId: any = prompt("Enter room ID:");
+      localStorage.setItem("roomId", roomId);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
       socket.emit(
         "join-room",
         roomId,
@@ -109,6 +131,7 @@ function Board() {
           if (success) {
             setRoom(roomId);
             setIsPlayersMove(firstMoveCheck);
+            firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
           } else {
             alert("Failed to join the room");
           }
@@ -201,12 +224,13 @@ function Board() {
       <Chessboard
         position={position}
         onDrop={handleMove}
-        orientation={"white"}
-        width={400}
+        orientation={playerColor}
+        width={600}
         darkSquareStyle={{ backgroundColor: "#B7C0D8" }}
         lightSquareStyle={{ backgroundColor: "#E8EDF9" }}
         draggable={isPlayersMove}
         dropOffBoard="snapback"
+        transitionDuration={10}
       />
       <div>
         <button onClick={handleCreateRoom}>Create Room</button>

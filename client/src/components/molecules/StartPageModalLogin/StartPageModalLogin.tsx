@@ -4,6 +4,7 @@ import "./StartPageModalLogin.css";
 import { useAppDispatch } from "../../../redux/typesRedux";
 import { loginUser } from "../../../redux/thunk/auth/loginUser";
 import Button from "../../atoms/Button/Button";
+import { useNavigate } from "react-router";
 
 const initialState: ILoginForm = {
   user_email: "",
@@ -19,7 +20,7 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
     ILoginForm,
     React.Dispatch<React.SetStateAction<ILoginForm>>
   ];
-
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const inputsChangeHandler = (
@@ -31,12 +32,10 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Действия при отправке формы
-    console.log("Login form submitted");
-    console.log("email:", inputValues.user_email);
-    console.log("password:", inputValues.user_password);
+
     dispatch(loginUser(inputValues));
     setShowLoginModal(false);
+    navigate("/home");
   };
 
   return (

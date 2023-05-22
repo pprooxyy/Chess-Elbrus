@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Profile.css";
+import "./ProfilePage.css";
 import Navbar from "../../organisms/Navbar/Navbar";
 import MainProfilePage from "../../organisms/Profile/Profile";
 

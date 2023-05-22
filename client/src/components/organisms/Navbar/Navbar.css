@@ -31,6 +31,7 @@
   font-size: 20px;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
+  transition: font-size 0.3s ease;
 }
 
 a {
@@ -45,4 +46,17 @@ a {
 .nav li {
   display: flex;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    width: 130px;
+  }
+  .nav-item {
+    font-size: 16px;
+    transition: font-size 0.3s ease;
+  }
+  .navbar-icon {
+    display: none;
+  }
 }
