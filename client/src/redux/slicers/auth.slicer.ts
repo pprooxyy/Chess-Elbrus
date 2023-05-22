@@ -30,6 +30,9 @@ const authSlicer = createSlice({
     // delUser(state) {
     //   state.user = initialUser;
     // },
+    setAuthStatus(state, action){
+      state.isAuthenticated = action.payload.isAuthenticated;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -97,5 +100,5 @@ const authSlicer = createSlice({
       });
   },
 });
-
+export const {setAuthStatus} = authSlicer.actions;
 export default authSlicer.reducer;

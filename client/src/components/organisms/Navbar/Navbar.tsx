@@ -3,7 +3,7 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { useAppDispatch } from "../../../redux/typesRedux";
+import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 export default function Navbar() {
@@ -11,12 +11,15 @@ export default function Navbar() {
 
   //todo через thunk навбар обращается к серверу и получает юзера,
   //todo который лежит в сессии и кладёт его в стейт
-  useEffect(() => {
-    dispatch(getUser());
-  }, []);
-
+  // useEffect(() => {
+  //   dispatch(getUser());
+  // }, []);
+  const userID = useAppSelector(state => state.authSlicer.user.id)
   //todo достаёт юзера из стейта
-  const user = useSelector((state: RootState) => state.authSlicer.user);
+  //const user = useSelector((state: RootState) => state.authSlicer.user);
+  const user: any= localStorage.getItem("user")
+  const parsedUser = JSON.parse(user);
+  console.log((parsedUser), 'userId in NAV')
   console.log("user from Navbar: ", user);
 
   return (
@@ -42,7 +45,8 @@ export default function Navbar() {
             Play
           </li>
         </Link>
-        {/* <Link to={`/profile/${user.id}`}>
+        <Link to={`/profile/${parsedUser.id}`}>
+
           <li className="nav-item">
             <img
               className="navbar-icon"
