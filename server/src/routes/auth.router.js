@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const { User } = require("../../db/models");
 
 router.get("/", (req, res) => {
-  console.log(" session =>", req.session);
-  res.json({ user: req.session?.user || "" });
+  // console.log(" session =>", req.session);
+  res.status(200).json(req.session.user);
 });
 
 router.post("/register", async (req, res) => {

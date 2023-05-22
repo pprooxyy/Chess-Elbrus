@@ -11,12 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Game, { foreignKey: "game_player1_id" });
       User.hasMany(models.Game, { foreignKey: "game_player2_id" });
       User.belongsToMany(models.User, {
-        as: "Friend",
-        through: "Friends",
+        through: models.Friend, // Use the Friend model to establish the association
+        as: "Friends",
         foreignKey: "user_id",
         otherKey: "friend_id",
       });
     }
+    
   }
   User.init(
     {

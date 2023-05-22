@@ -6,8 +6,11 @@ import MainPage from "./components/pages/MainPage/MainPage";
 import FriendPage from "./components/pages/FriendsPage/FriendsPage";
 import HistoryPage from "./components/pages/HistoryPage/HistoryPage";
 import LeaderboardPage from "./components/pages/LeaderboardPage/LeaderboardPage";
-import Board from "./components/atoms/Board/Board";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
+import GamePage from "./components/pages/GamePage/GamePage";
+import { io } from "socket.io-client";
+
+const socket: any = io("http://localhost:3002");
 
 function App() {
   return (
@@ -19,7 +22,7 @@ function App() {
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/leaders" element={<LeaderboardPage />} />
-        <Route path="/game" element={<Board />} />
+        <Route path="/game" element={<GamePage socket={socket} />} />
       </Routes>
     </div>
   );

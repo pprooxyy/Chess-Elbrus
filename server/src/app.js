@@ -8,7 +8,10 @@ const dbCheck = require("./middlewares/dbCheck");
 const authRouter = require("./routes/auth.router");
 const gameRouter = require("./routes/game.router");
 const profileRouter = require("./routes/profile.router");
+const friendRouter = require("./routes/friend.router");
+
 const socketModule = require("./sockets/socket");
+const chatSocket = require("./sockets/chat.socket");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -50,17 +53,22 @@ const io = require("socket.io")(3002, {
   cors: {
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
       "http://localhost:3002",
       "http://localhost:3003",
       "http://localhost:3004",
     ],
+    methods: ["GET", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type"],
   },
 });
 socketModule(io, rooms);
+chatSocket(io);
 
 app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/", gameRouter);
+app.use("/friends", friendRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);
