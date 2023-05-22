@@ -5,7 +5,7 @@ const Game = require("../lib/Room.class");
 module.exports = (io, rooms) => {
   io.on("connect", (socket) => {
     socket.on("reconnect", (previousData, callback) => {
-      console.log(previousData);
+      console.log("LOG_DATA_FOR_RECONNECT", previousData);
       const roomArray = findRoomByPlayerId(
         previousData.storageUserId,
         Array.from(rooms)
@@ -14,7 +14,9 @@ module.exports = (io, rooms) => {
       if (roomArray) {
         const roomObject = { [roomArray[0]]: roomArray[1] };
         console.log("LOG ROOM OBJECT", roomObject);
-        // callback(roomObject);
+        callback(roomObject);
+        socket.join(roomArray[0]);
+        socket.emit("reconnect", roomObject);
         // if (roomObject) {
         //   socket.emit("move", roomObject.game.fen());
         // }
@@ -99,6 +101,7 @@ function isPlayersTurn(player, room) {
 
 function findRoomByPlayerId(playerId, rooms) {
   for (const room of rooms) {
+    console.log("ROOOOOMS", rooms);
     const player1 = room[1].player1;
     const player2 = room[1].player2;
     if (player1 && player1.id === Number(playerId)) {
