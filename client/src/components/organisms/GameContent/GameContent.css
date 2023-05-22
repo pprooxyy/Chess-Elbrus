@@ -1,0 +1,10 @@
+.game-page-content-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 50px;
+  background-color: #e8edf9;
+  margin-left: 200px;
+  padding: 40px 0;
+}
