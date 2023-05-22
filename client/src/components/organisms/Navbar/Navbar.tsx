@@ -46,6 +46,7 @@ export default function Navbar() {
           </li>
         </Link>
         <Link to={`/profile/${parsedUser.id}`}>
+
           <li className="nav-item">
             <img
               className="navbar-icon"
@@ -54,7 +55,7 @@ export default function Navbar() {
             />
             Profile
           </li>
-        </Link>
+        </Link> */}
         <Link to="/leaders">
           <li className="nav-item">
             <img
