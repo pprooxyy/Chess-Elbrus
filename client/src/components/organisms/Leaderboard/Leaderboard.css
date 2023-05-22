@@ -24,6 +24,7 @@
 
 .top-10-players-table td,
 .top-10-players-table th {
+  height: 29px;
   padding: 8px;
 }
 
@@ -33,4 +34,9 @@
 
 .top-10-players-table tr:hover {
   background-color: #e6e6e6;
+}
+
+.prize-icon {
+  width: 25px;
+  height: 25px;
 }
