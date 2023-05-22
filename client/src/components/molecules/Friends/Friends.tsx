@@ -79,8 +79,10 @@ const Friends: React.FC = () => {
 
   return (
     <div className="friends-container">
-      <h2>Friends</h2>
-
+      <h2 className='title-friend'>Friends</h2>
+      {friends.length === 0 ? (
+        <p className='no-friend-list'>Список друзей пуст, добавьте друга по нику</p>
+      ) : (
       <ul className="friend-list">
         {friends.map((friend) => (
           <li key={friend.id} className="friend-item">
@@ -89,17 +91,19 @@ const Friends: React.FC = () => {
           </li>
         ))}
       </ul>
-
-      <div className="add-friend">
-        <h3>Add Friend</h3>
-        <input
-          type="text"
-          value={newFriendName}
-          onChange={(e) => setNewFriendName(e.target.value)}
-          placeholder="Enter friend's name"
-          className="friend-input"
-        />
-        <button onClick={addFriend} className="add-button">Add</button>
+      )}
+      <div className="puzzle-content-wrapper">
+        <div className="add-friend">
+          <h3>Добавить друга</h3>
+          <input
+            type="text"
+            value={newFriendName}
+            onChange={(e) => setNewFriendName(e.target.value)}
+            placeholder="Введите имя друга"
+            className="friend-input"
+          />
+          <button onClick={addFriend} className="add-button">Add</button>
+        </div>
       </div>
     </div>
   );
