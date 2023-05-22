@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ILoginForm } from "../../../types";
 import "./StartPageModalLogin.css";
-import { useAppDispatch } from "../../../redux/typesRedux";
+import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { loginUser } from "../../../redux/thunk/auth/loginUser";
 import Button from "../../atoms/Button/Button";
 import { useNavigate } from "react-router";
@@ -30,6 +30,9 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
     setInputValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const isAuth = useAppSelector(state => state.authSlicer.isAuthenticated)
+  const message = useAppSelector(state => state.authSlicer.msg)
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -37,6 +40,13 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
     setShowLoginModal(false);
     navigate("/home");
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (isAuth) navigate('/home')
+    }, 1000)
+  }, [isAuth, navigate])
+
 
   return (
     <div className="modal-overlay-login">
@@ -58,6 +68,7 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
             placeholder="password"
           />
           <br />
+          {!isAuth ? (<div>{message} </div>) : (<div>{message} </div> ) }
           <div className="button-container">
             <Button text="Submit" width="150px" height="50px" />
             <Button

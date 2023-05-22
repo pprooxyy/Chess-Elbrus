@@ -18,6 +18,12 @@ export default function Leaderboard() {
     return data;
   };
 
+  const images = [
+    "/assets/prize-icons/1st-prize-icon.svg",
+    "/assets/prize-icons/2nd-prize-icon.svg",
+    "/assets/prize-icons/3rd-prize-icon.svg",
+  ];
+
   const [playersData] = useState(generateRandomData());
 
   return (
@@ -26,6 +32,7 @@ export default function Leaderboard() {
         <caption>Top 10 Players</caption>
         <thead>
           <tr>
+            <th>Place</th>
             <th>Name</th>
             <th>Total Games</th>
             <th>Win</th>
@@ -37,6 +44,29 @@ export default function Leaderboard() {
         <tbody>
           {playersData.map((player, index) => (
             <tr key={index}>
+              <td>
+                {index + 1 === 1 ? (
+                  <img
+                    src={images[0]}
+                    alt={`Prize for ${index + 1}st place`}
+                    className="prize-icon"
+                  />
+                ) : index + 1 === 2 ? (
+                  <img
+                    src={images[1]}
+                    alt={`Prize for ${index + 1}nd place`}
+                    className="prize-icon"
+                  />
+                ) : index + 1 === 3 ? (
+                  <img
+                    src={images[2]}
+                    alt={`Prize for ${index + 1}rd place`}
+                    className="prize-icon"
+                  />
+                ) : (
+                  index + 1
+                )}
+              </td>
               <td>{player.name}</td>
               <td>{player.totalGames}</td>
               <td>{player.win}</td>
