@@ -42,7 +42,7 @@ export default function Navbar() {
             Play
           </li>
         </Link>
-        <Link to={`/profile/${user.id}`}>
+        {/* <Link to={`/profile/${user.id}`}>
           <li className="nav-item">
             <img
               className="navbar-icon"
@@ -51,7 +51,7 @@ export default function Navbar() {
             />
             Profile
           </li>
-        </Link>
+        </Link> */}
         <Link to="/leaders">
           <li className="nav-item">
             <img
