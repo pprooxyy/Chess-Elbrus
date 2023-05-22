@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IRegisterForm } from "../../../types";
 import { registerUser } from "../../../redux/thunk/auth/registerUser";
-import { useAppDispatch } from "../../../redux/typesRedux";
+import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import Button from "../../atoms/Button/Button";
 import "./StartPageModalRegister.css";
 import { useNavigate } from "react-router";
@@ -34,14 +34,23 @@ export default function RegisterModal({
     setInputValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const isAuth = useAppSelector(state => state.authSlicer.isAuthenticated)
+  const message = useAppSelector(state => state.authSlicer.msg)
+  
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Действия при отправке формы
 
     dispatch(registerUser(inputValues));
-    setShowRegisterModal(false);
-    navigate("/home");
+    
+    
   };
+  // redirect to home if user is logged in
+  useEffect(() => {
+    setTimeout(() => {
+      if (isAuth) navigate('/home')
+    }, 1000)
+  }, [isAuth, navigate])
 
   return (
     <div className="modal-overlay-register">
@@ -71,6 +80,7 @@ export default function RegisterModal({
             placeholder="password"
           />
           <br />
+          {!isAuth ? (<div>{message} </div>) : (<div>{message} </div> ) }
           <div className="button-container">
             <Button text="Submit" width="150px" height="40px" />
             <Button
