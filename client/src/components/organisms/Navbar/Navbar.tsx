@@ -55,7 +55,7 @@ export default function Navbar() {
             />
             Profile
           </li>
-        </Link> */}
+        </Link> 
         <Link to="/leaders">
           <li className="nav-item">
             <img
