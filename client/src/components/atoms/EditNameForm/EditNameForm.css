@@ -1,0 +1,28 @@
+.edit-name-form {
+  display: flex;
+  flex-direction: row;
+}
+
+.edit-name-form input {
+  background-color: #ced7f0;
+  width: 200px;
+  height: 35px;
+}
+.edit-name-form button {
+  cursor: pointer;
+  background-color: #b7c0d8;
+  margin: 5px;
+  padding: 3px;
+  height: 30px;
+  width: 30px;
+  border: none;
+}
+
+.edit-name-form button:hover {
+  scale: 1.1;
+  transition: font-size 0.3s ease;
+}
+
+button img {
+  width: 30px;
+}

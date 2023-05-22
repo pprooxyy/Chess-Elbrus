@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasMany(models.Game, { foreignKey: "player1_id" });
-      User.hasMany(models.Game, { foreignKey: "player2_id" });
+      User.hasMany(models.Game, { foreignKey: "game_player1_id" });
+      User.hasMany(models.Game, { foreignKey: "game_player2_id" });
       User.belongsToMany(models.User, {
         through: models.Friend, // Use the Friend model to establish the association
         as: "Friends",
