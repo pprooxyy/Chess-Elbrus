@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./Friends.css";
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 interface Friend {
   id: number;
@@ -97,17 +99,17 @@ const Friends: React.FC = () => {
       {friends.length === 0 ? (
         <p className='no-friend-list'>Список друзей пуст, добавьте друга по нику</p>
       ) : (
-        <ul className="friend-list">
-          {friends.map((friend) => (
-            <li key={friend.id} className="friend-item">
-              <div className="friend-avatar">
-                <img src={friend.avatar} alt={friend.name} />
-              </div>
-              <a href={`/profile/${friend.id}`} className="friend-name">{friend.name}</a>
-              <button onClick={() => deleteFriend(friend.id)} className="delete-button">Delete</button>
-            </li>
-          ))}
-        </ul>
+        <div className="friend-cards">
+        {friends.map((friend) => (
+          <Card key={friend.id} className="friend-card">
+            <Card.Img variant="top" src={friend.avatar} alt={friend.name} className='avatar'/>
+            <Card.Body>
+            <a href={`/profile/${friend.id}`} className="friend-name"><Card.Title>{friend.name}</Card.Title></a>
+              <Button variant="danger" onClick={() => deleteFriend(friend.id)} className="custom-button">Delete</Button>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
       )}
     </div>
   );
