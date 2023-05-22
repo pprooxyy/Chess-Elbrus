@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
 router.put("/", async (req, res) => {
   const { newName, newPic } = req.body;
   const id = req.session.user.id;
-  console.log("------->", id);
+  // console.log("------->", id);
   try {
     if (newName !== "") {
       await User.update({ user_name: newName }, { where: { id }, raw: true });

@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const { User } = require("../../db/models");
 
 router.get("/", (req, res) => {
-  // console.log(" session =>", req.session);
-  res.status(200).json(req.session.user);
+  // console.log("================================");
+  res.json(req.session.user);
 });
 
 router.post("/register", async (req, res) => {
@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
       user_rating: 0,
     },
   });
-  console.log(newUser);
+  // console.log(newUser);
   if (newUser[1]) {
     req.session.user = {
       id: newUser[0].dataValues.id,
@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
     where: { user_email },
     plain: true,
   });
-  console.log(user);
+  // console.log(user);
   if (user) {
     const passCheck = await bcrypt.compare(user_password, user.user_password);
     if (passCheck) {
@@ -58,6 +58,8 @@ router.post("/login", async (req, res) => {
         user_rating: user.dataValues.user_rating,
         user_avatar: user.dataValues.user_avatar,
       };
+      // console.log("SESSION ", req.session);
+      // req.session.save(); //!
       res.json({
         msg: "Success",
         user: {
