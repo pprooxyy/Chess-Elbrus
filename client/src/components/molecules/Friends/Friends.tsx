@@ -4,6 +4,7 @@ import "./Friends.css";
 interface Friend {
   id: number;
   name: string;
+  avatar: string;
 }
 
 const Friends: React.FC = () => {
@@ -83,14 +84,17 @@ const Friends: React.FC = () => {
       {friends.length === 0 ? (
         <p className='no-friend-list'>Список друзей пуст, добавьте друга по нику</p>
       ) : (
-      <ul className="friend-list">
-        {friends.map((friend) => (
-          <li key={friend.id} className="friend-item">
-            <a href={`/profile/${friend.id}`} className="friend-name">{friend.name}</a>
-            <button onClick={() => deleteFriend(friend.id)} className="delete-button">Delete</button>
-          </li>
-        ))}
-      </ul>
+        <ul className="friend-list">
+          {friends.map((friend) => (
+            <li key={friend.id} className="friend-item">
+              <div className="friend-avatar">
+                <img src={friend.avatar} alt={friend.name} />
+              </div>
+              <a href={`/profile/${friend.id}`} className="friend-name">{friend.name}</a>
+              <button onClick={() => deleteFriend(friend.id)} className="delete-button">Delete</button>
+            </li>
+          ))}
+        </ul>
       )}
       <div className="puzzle-content-wrapper">
         <div className="add-friend">
