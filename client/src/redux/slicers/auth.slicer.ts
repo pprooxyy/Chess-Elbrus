@@ -32,6 +32,9 @@ const authSlicer = createSlice({
     // },
     setAuthStatus(state, action){
       state.isAuthenticated = action.payload.isAuthenticated;
+    },
+    logout(state) {
+      Object.assign(state, initialState);
     }
   },
   extraReducers: (builder) => {
@@ -41,7 +44,7 @@ const authSlicer = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
-        state.isAuthenticated = true;
+        state.isAuthenticated = action.payload.isAuthenticated;
         state.isLoading = false;
         state.error = null;
         state.msg = action.payload.msg;
@@ -58,7 +61,7 @@ const authSlicer = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
-        state.isAuthenticated = true;
+        state.isAuthenticated = action.payload.isAuthenticated;
         state.isLoading = false;
         state.error = null;
         state.msg = action.payload.msg;
@@ -100,5 +103,5 @@ const authSlicer = createSlice({
       });
   },
 });
-export const {setAuthStatus} = authSlicer.actions;
+export const {setAuthStatus, logout} = authSlicer.actions;
 export default authSlicer.reducer;
