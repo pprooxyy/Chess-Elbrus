@@ -54,9 +54,11 @@ export default function MainProfilePage() {
   ];
 
   //todo обновление стейта profileOwner, если обновился user (при редактировании)
-  if (user.id === profileOwner.id) {
-    dispatch(setProfileOwner(user));
-  }
+  useEffect(() => {
+    if (user.id === profileOwner.id) {
+      dispatch(setProfileOwner(user));
+    }
+  }, [user, profileOwner]);
 
   return (
     <>

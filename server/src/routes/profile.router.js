@@ -81,10 +81,12 @@ router.put("/", async (req, res) => {
       user_avatar: editedUser.user_avatar,
     };
 
-    res.status(200).json(data);
+    req.session.user = data; //!
+
+    res.json(data);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Failed to update user" });
+    res.json({ error: "Failed to update user" });
   }
 });
 
