@@ -7,7 +7,10 @@ import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUserGames } from "../../../redux/thunk/profile/getUserGames";
 import EditNameForm from "../../atoms/EditNameForm/EditNameForm";
 import EditAvatarModal from "../../molecules/EditAvatarModal/EditAvatarModal";
-import { setProfileOwner } from "../../../redux/slicers/profile.slicer";
+import {
+  delFriend,
+  setProfileOwner,
+} from "../../../redux/slicers/profile.slicer";
 import { Link } from "react-router-dom";
 
 export default function MainProfilePage() {
@@ -65,6 +68,30 @@ export default function MainProfilePage() {
       dispatch(setProfileOwner(user));
     }
   }, [user, profileOwner]);
+
+  //todo хендлер удаления друга (потом мб будет перенесен в санк)
+  const delFriendHandler = async (friendId: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/friends/${friendId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        dispatch(delFriend(friendId));
+      } else {
+        console.error("Failed to delete friend:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Failed to delete friend:", error);
+    }
+  };
 
   return (
     <>
@@ -137,7 +164,7 @@ export default function MainProfilePage() {
           <div className="games-history">
             <h2>Games history:</h2>
             {userGames.map((game) => (
-              <li key={game.id} className="history-item">
+              <li className="history-item" key={game.id}>
                 <p>
                   {game.winner === game.player1 && (
                     <img
@@ -217,6 +244,7 @@ export default function MainProfilePage() {
               <button
                 className="btn-edit-user"
                 style={{ margin: "7px 0px 0px 0px" }}
+                onClick={() => delFriendHandler(friend.id)}
               >
                 <img alt="cancel" src="/assets/profilePage/cancel-icon.svg" />
               </button>
