@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
             raw: true,
         });
 
+
         if (userFriendsRaw.length === 0) {
             return res.json([]);
         }
@@ -137,7 +138,6 @@ router.post("/:user_id", async (req, res) => {
         const { user_id } = req.params;
         const friend = await Friend.findOne({
             where: { [Op.or]: [{ user_id: userId, friend_id: user_id }, { user_id: user_id, friend_id: userId }] },
-
         });
 
         console.log(`add ${userId} to ${user_id}`);
@@ -164,7 +164,6 @@ router.delete("/:user_id", async (req, res) => {
         const userId = req.session.user.id;
         const { user_id } = req.params;
         const friend = await Friend.findOne({
-
             where: { [Op.or]: [{ user_id: userId, friend_id: user_id }, { user_id: user_id, friend_id: userId }] },
 
         });
