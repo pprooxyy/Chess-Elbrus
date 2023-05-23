@@ -2,12 +2,14 @@ const router = require("express").Router();
 const { where } = require("sequelize");
 const { Friend, User } = require("../../db/models");
 
-// Get all friends for the authenticated user
 router.get("/", async (req, res) => {
     try {
         const userFriends = await Friend.findAll({
-            where: { user_id: req.session.user.user_id },
+            where: { user_id: req.session.user.id },
         });
+        if (userFriends.length === 0) {
+            return res.json([]);
+        }
         const users = await User.findAll({
             raw: "true"
         })
@@ -20,7 +22,8 @@ router.get("/", async (req, res) => {
             const user = map[userFriends[i].dataValues.friend_id];
             arr.push({
                 id: user.id,
-                name: user.user_name
+                name: user.user_name,
+                avatar: user.user_avatar
             })
         }
         res.json(arr);
@@ -30,13 +33,10 @@ router.get("/", async (req, res) => {
     }
 });
 
-// Add a friend by name for the authenticated user
 router.post("/", async (req, res) => {
     try {
-        const userId = req.session.user.user_id
-        //console.log(req.session.user)
+        const userId = req.session.user.id
         const { name } = req.body;
-        // Find the friend by name
         const friend = await User.findOne({
             where: { user_name: name },
         });
@@ -44,8 +44,6 @@ router.post("/", async (req, res) => {
         if (!friend) {
             return res.status(404).json({ error: "Friend not found" });
         }
-
-        // Check if the friend already exists
         const existingFriend = await Friend.findOne({
             where: { user_id: userId, friend_id: friend.dataValues.id },
         });
@@ -53,8 +51,6 @@ router.post("/", async (req, res) => {
         if (existingFriend) {
             return res.status(400).json({ error: "Friend already exists" });
         }
-
-        // Create a new friend entry
         const newFriend = await Friend.create({
             user_id: userId,
             friend_id: friend.dataValues.id,
@@ -67,21 +63,17 @@ router.post("/", async (req, res) => {
     }
 });
 
-// Delete a friend by ID for the authenticated user
 router.delete("/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
-
-        // Find the friend by ID
         const friend = await Friend.findOne({
-            where: { user_id: req.session.user.user_id, friend_id: user_id },
+            where: { user_id: req.session.user.id, friend_id: user_id },
         });
 
         if (!friend) {
             return res.status(404).json({ error: "Friend not found" });
         }
 
-        // Delete the friend entry
         await friend.destroy();
 
         res.json({ message: "Friend deleted" });
