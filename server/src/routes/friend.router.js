@@ -111,6 +111,7 @@ router.post("/", async (req, res) => {
             }
         }
 
+
         res.json({ users: userArr, friends: friendArr }).status(201);
         // const existingFriend = await Friend.findOne({
         //     [Op.or]: [{ user_id: userId, friend_id: friends.dataValues.id }, { user_id: friend.dataValues.id, friend_id: userId }],
@@ -164,6 +165,7 @@ router.delete("/:user_id", async (req, res) => {
         const { user_id } = req.params;
         const friend = await Friend.findOne({
             where: { [Op.or]: [{ user_id: userId, friend_id: user_id }, { user_id: user_id, friend_id: userId }] },
+
         });
 
         if (!friend) {

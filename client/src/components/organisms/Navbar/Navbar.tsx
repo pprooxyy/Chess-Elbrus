@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
+import { logoutUser } from "../../../redux/thunk/auth/logoutUser";
 
-import { logout } from "../../../redux/slicers/auth.slicer";
+
 
 
 
@@ -22,8 +23,10 @@ export default function Navbar() {
 
   const logoutHandler = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) =>{
       e.preventDefault();
-      dispatch(logout())
+      dispatch(logoutUser())
+     
       navigate('/')
+      
     }
 
   
