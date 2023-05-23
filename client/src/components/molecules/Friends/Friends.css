@@ -53,7 +53,7 @@ button {
 }
 
 
-.friends-container {
+.friend-container {
   display: flex;
   justify-content: center;
   align-items: center;
