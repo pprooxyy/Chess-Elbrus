@@ -47,7 +47,7 @@
   justify-content: flex-start;
   background-color: #e8edf9;
   width: 25%;
-  border: 1px solid black;
+  border: 2px solid grey;
   border-radius: 5px;
   padding: 10px;
   gap: 10px;
@@ -87,7 +87,7 @@
 }
 
 .img-wrapper {
-  width: 100%;
+  width: 90%;
   padding-top: 15px;
   display: flex;
   flex-direction: column;

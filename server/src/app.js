@@ -37,6 +37,7 @@ app.use(
       "http://localhost:3005",
       "http://localhost:3002",
       "http://localhost:3003",
+      "https://api.chess.com/pub/leaderboards",
     ],
     credentials: true,
   })

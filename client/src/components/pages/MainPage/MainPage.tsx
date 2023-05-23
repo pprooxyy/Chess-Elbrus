@@ -11,7 +11,7 @@ function MainPage() {
       <Navbar />
       <div className="main-page-wrapper">
         <MainPlaySection />
-        <MainPuzzles />
+        {/* <MainPuzzles /> */}
         <MainNews />
       </div>
     </>

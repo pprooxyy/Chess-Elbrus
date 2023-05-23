@@ -101,3 +101,11 @@ export interface IStatForLeaders {
   draws: number;
   user_rating: number;
 }
+
+//? Main Page Slicer
+
+export interface IChessComState {
+  leaderboard: Array<any>;
+  isLoading: boolean;
+  error: string | null | undefined;
+}

@@ -1,0 +1,8 @@
+.newsList-item {
+  border: 1px solid black;
+  max-width: fit-content;
+}
+
+.newsList-item-avatar {
+  width: 100px;
+}
