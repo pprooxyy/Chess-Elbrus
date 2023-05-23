@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ILeaderState, IGame } from "../../types";
+import { ILeaderState, IStatForLeaders } from "../../types";
 import { getGamesForLeaders } from "../thunk/Leaders/getGamesForLeaders";
 
 const initialState: ILeaderState = {
@@ -20,7 +20,7 @@ const leaderSlice = createSlice({
       })
       .addCase(
         getGamesForLeaders.fulfilled,
-        (state, action: PayloadAction<IGame[]>) => {
+        (state, action: PayloadAction<IStatForLeaders[]>) => {
           state.games = action.payload;
           state.isLoading = false;
           state.error = null;

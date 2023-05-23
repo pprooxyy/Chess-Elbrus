@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IGame } from "../../../types";
+import { IStatForLeaders } from "../../../types";
 
-export const getGamesForLeaders = createAsyncThunk<IGame[], void>(
+export const getGamesForLeaders = createAsyncThunk<IStatForLeaders[], void>(
   "leaders/getGamesForLeaders",
   async () => {
     try {
       const response = await fetch("http://localhost:3001/leaders", {
         credentials: "include",
       });
-      const result: IGame[] = await response.json();
+      const result: IStatForLeaders[] = await response.json();
 
       console.log("RESULT from getGames thunk", result);
       return result;
