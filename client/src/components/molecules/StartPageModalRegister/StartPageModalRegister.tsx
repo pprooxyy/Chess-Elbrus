@@ -40,14 +40,12 @@ export default function RegisterModal({
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Действия при отправке формы
-
     dispatch(registerUser(inputValues));
-    
-    
   };
   // redirect to home if user is logged in
   useEffect(() => {
     setTimeout(() => {
+      console.log(isAuth, 'is auth in settimeout ')
       if (isAuth) navigate('/home')
     }, 1000)
   }, [isAuth, navigate])
