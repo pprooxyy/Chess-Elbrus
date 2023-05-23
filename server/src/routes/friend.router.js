@@ -1,15 +1,27 @@
 const router = require("express").Router();
-const { where } = require("sequelize");
+const { Op } = require("sequelize");
 const { Friend, User } = require("../../db/models");
 
 router.get("/", async (req, res) => {
     try {
-        const userFriends = await Friend.findAll({
-            where: { user_id: req.session.user.id },
+        const userFriendsRaw = await Friend.findAll({
+            where: {
+                [Op.or]: [{ user_id: req.session.user.id }, { friend_id: req.session.user.id }],
+            },
+            raw: true,
         });
-        if (userFriends.length === 0) {
+
+        if (userFriendsRaw.length === 0) {
             return res.json([]);
         }
+
+        const userFrends = userFriendsRaw.map((freind) => {
+            if (freind.user_id === req.session.user.id) {
+                return freind.friend_id
+            } else {
+                return freind.user_id
+            }
+        })
         const users = await User.findAll({
             raw: "true"
         })
@@ -18,8 +30,8 @@ router.get("/", async (req, res) => {
             map[users[i].id] = users[i]
         }
         const arr = []
-        for (let i = 0; i < userFriends.length; i++) {
-            const user = map[userFriends[i].dataValues.friend_id];
+        for (let i = 0; i < userFrends.length; i++) {
+            const user = map[userFrends[i]];
             arr.push({
                 id: user.id,
                 name: user.user_name,
@@ -45,7 +57,7 @@ router.post("/", async (req, res) => {
             return res.status(404).json({ error: "Friend not found" });
         }
         const existingFriend = await Friend.findOne({
-            where: { user_id: userId, friend_id: friend.dataValues.id },
+            [Op.or]: [{ user_id: userId, friend_id: friend.dataValues.id }, { user_id: friend.dataValues.id, friend_id: userId }],
         });
 
         if (existingFriend) {
@@ -67,7 +79,7 @@ router.delete("/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
         const friend = await Friend.findOne({
-            where: { user_id: req.session.user.id, friend_id: user_id },
+            [Op.or]: [{ user_id: req.session.user.id, friend_id: user_id }, { user_id: user_id, friend_id: req.session.user.id }],
         });
 
         if (!friend) {

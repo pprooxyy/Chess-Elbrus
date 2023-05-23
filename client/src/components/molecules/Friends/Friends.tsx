@@ -94,7 +94,7 @@ const Friends: React.FC = () => {
   };
 
   return (
-    <div className="friends-container">
+    <div className="friend-container">
       <h2 className='title-friend'>Friends</h2>
       <div className="puzzle-content-wrapper">
         <div className="add-friend">
