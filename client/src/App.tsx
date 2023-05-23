@@ -38,11 +38,11 @@ function App() {
       <Routes>
         <Route path="/" element={<StartPage />} />
       </Routes>
-      {loadingAuth ? (
+      {/* {loadingAuth ? ( <---- это говно не работает хуйня переделывай
         <h1>LOADING...</h1>
-      ) : (
+      ) : ( */}
+      {(
         <Routes>
-          
           <Route path="/home" element={<MainPage />} />
           <Route path="/friends" element={<FriendPage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />

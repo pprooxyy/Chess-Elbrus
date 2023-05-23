@@ -5,16 +5,25 @@ const Game = require("../lib/Room.class");
 module.exports = (io, rooms) => {
   io.on("connect", (socket) => {
     socket.on("reconnect", (previousData, callback) => {
+      if (!previousData) return;
+
       console.log("LOG_DATA_FOR_RECONNECT", previousData);
       const roomArray = findRoomByPlayerId(
-        previousData.storageUserId,
-        Array.from(rooms)
+        previousData.id,
+        rooms
       );
       console.log("room array", roomArray);
       if (roomArray) {
-        const roomObject = { [roomArray[0]]: roomArray[1] };
+        const room = roomArray[1];
+        const player = room.getPlayerById(previousData.id);
+
+        const roomObject = {
+          roomId: room.roomId,
+          playerColor: player.color,
+          playerCanMove: room.isFull() && room.game.turn() === player.color,
+          board: room.game.fen()
+        };
         console.log("LOG ROOM OBJECT", roomObject);
-        callback(roomObject);
         socket.join(roomArray[0]);
         socket.emit("reconnect", roomObject);
         // if (roomObject) {
@@ -24,13 +33,23 @@ module.exports = (io, rooms) => {
     });
 
     socket.on("create-room", (user, callback) => {
+      if (!user) return
+      const oldRoomArr = findRoomByPlayerId(user.id, rooms)
+      if (oldRoomArr) {
+        const oldRoom = rooms.get(oldRoomArr[0]);
+        oldRoom.removePlayerById(user.id)
+        if (oldRoom.isEmpty()) {
+          rooms.delete(oldRoom[0]);
+        }
+      }
+
       const game = new Chess();
       const roomId = uuidv4();
       const room = new Game(roomId, game, null, null);
       const randomColor = room.randomColor();
 
       const playerParams = [
-        user.user_id,
+        user.id,
         user.user_name,
         user.user_rating,
         randomColor,
@@ -47,15 +66,28 @@ module.exports = (io, rooms) => {
     });
 
     socket.on("join-room", (roomId, user, callback) => {
+      if (!user || !user.id) return;
       const room = rooms.get(roomId);
-      const setSecondPlayerColor = room.setSecondPlayerColor();
-
       if (!room) return callback(false);
       if (room.isFull()) return callback(false);
 
+      const oldRoomArr = findRoomByPlayerId(user.id, rooms)
+
+      if (oldRoomArr) {
+        if (oldRoomArr[0] === roomId) callback(false)
+
+        const oldRoom = rooms.get(oldRoomArr[0]);
+        oldRoom.removePlayerById(user.id)
+        if (oldRoom.isEmpty()) {
+          rooms.delete(oldRoom[0]);
+        }
+      }
+
+      const setSecondPlayerColor = room.getSecondPlayerColor();
+
       if (room.player2 === null) {
         const playerParams = [
-          user.user_id,
+          user.id,
           user.user_name,
           user.user_rating,
           setSecondPlayerColor,
@@ -68,23 +100,22 @@ module.exports = (io, rooms) => {
         room.setPlayer(...playerParams);
         socket.join(roomId);
         // socket.emit("move", room.game.fen());
-        callback(true, firstMoveCheck);
+        callback(true, room.game.fen(), firstMoveCheck);
       }
     });
 
     socket.on(
       "move",
-      (user, move, roomId, position, currentMoove, callback) => {
+      (userId, roomId, move, position, callback) => {
         const room = rooms.get(roomId);
-        const player = room.getPlayerById(user.user_id);
+        if (!room) return callback(false);
+        const player = room.getPlayerById(userId);
+        if (!player) return callback(false);
+
         console.log("ROOM", room);
         console.log("PLAYER", player);
         console.log("POSITION CAME TO SERVER", room.game.ascii());
 
-        if (!player || !room) {
-          callback(false);
-          return;
-        }
         socket.join(roomId);
         const nextPosition = room.makeMove(position, move);
 
@@ -100,8 +131,8 @@ function isPlayersTurn(player, room) {
 }
 
 function findRoomByPlayerId(playerId, rooms) {
+  console.log("ROOOOOMS", rooms);
   for (const room of rooms) {
-    console.log("ROOOOOMS", rooms);
     const player1 = room[1].player1;
     const player2 = room[1].player2;
     if (player1 && player1.id === Number(playerId)) {

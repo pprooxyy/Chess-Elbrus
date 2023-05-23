@@ -1,5 +1,7 @@
+const { Chess } = require("chess.js");
+
 class Game {
-  constructor(roomId, game, player1, player2) {
+  constructor(roomId, game = new Chess(), player1, player2) {
     this.roomId = roomId;
     this.player1 = player1;
     this.player2 = player2;
@@ -11,40 +13,37 @@ class Game {
     return random > 0.5 ? "w" : "b";
   }
 
-  setSecondPlayerColor() {
+  getSecondPlayerColor() {
     return this.player1.color === "w" ? "b" : "w";
   }
 
-  setInitialTurns() {
-    if (this.player1.color === "w") {
-      this.player1.isPlayerTurn = true;
-      this.player2.isPlayerTurn = false;
-    } else if (this.player1.color === "b") {
-      this.player1.isPlayerTurn = false;
-      this.player2.isPlayerTurn = true;
-    } else return "error";
+  isGameEnd() {
+    return this.game.isGameOver() || this.game.isCheckmate() || this.game.isDraw()
+  }
+
+  isPlayerTurn(player) {
+    return player && this.isGameEnd() && player.color === this.game.turn()
+  }
+
+  setTurns() {
+    this.player1.isPlayerTurn = this.isPlayerTurn(this.player1);
+    this.player2.isPlayerTurn = this.isPlayerTurn(this.player2);
   }
 
   setPlayer(id, name, rating, color, isBot, isHost, wichPlayer) {
+    let player = {
+      id,
+      name,
+      rating,
+      color,
+      isBot,
+      isHost,
+      isPlayerTurn: null,
+    }
+
     wichPlayer === 1
-      ? (this.player1 = {
-          id,
-          name,
-          rating,
-          color,
-          isBot,
-          isHost,
-          isPlayerTurn: null,
-        })
-      : (this.player2 = {
-          id,
-          name,
-          rating,
-          color,
-          isBot,
-          isHost,
-          isPlayerTurn: null,
-        });
+      ? (this.player1 = player)
+      : (this.player2 = player);
   }
 
   log() {
@@ -74,6 +73,24 @@ class Game {
 
   isFull() {
     return this.player1 !== null && this.player2 !== null;
+  }
+
+  isEmpty() {
+    return this.player1 === null && this.player2 === null;
+  }
+
+  removePlayerById(id) {
+    if (this.player1 && this.player1.id === id) {
+      if (this.player2) {
+        this.player1 = this.player2;
+        this.player2.isHost = true;
+        this.player2 = null;
+      } else {
+        this.player1 = null;
+      }
+    } else if (this.player2 && this.player2.id === id) {
+      this.player2 = null
+    }
   }
 
   getPlayerById(id) {

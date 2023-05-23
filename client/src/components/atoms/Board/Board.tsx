@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Chessboard from "chessboardjsx";
-import { Chess } from "chess.js";
+import { Chess, Square } from "chess.js";
 import { useAppDispatch } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 function Board({ socket }: any) {
   const [chess, setChess] = useState(new Chess());
-  const [room, setRoom]: any = useState("");
-  const [position, setPosition]: any = useState(
+  const [room, setRoom] = useState("");
+  const [position, setPosition] = useState(
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   );
-  const [isPlayersMove, setIsPlayersMove]: any = useState(false);
-  const [playerColor, setPlayerColor]: any = useState("white");
+  const [isPlayersMove, setIsPlayersMove] = useState(false);
+  const [playerColor, setPlayerColor] = useState<'white' | 'black'>("white");
+  const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -20,43 +22,22 @@ function Board({ socket }: any) {
     console.log(chess);
 
     socket.on("connect", async () => {
-      const storageUserId = localStorage.getItem("userId");
-      const storageRoomId = localStorage.getItem("roomId");
-
-      if (storageUserId && storageRoomId) {
-        console.log("LALA");
-
-        socket.emit(
-          "reconnect",
-          { storageUserId, storageRoomId },
-          (onSuccess: any) => {
-            console.log("lala");
-
-            console.log("SUCCES", onSuccess);
-            console.log(onSuccess.storageRoomId);
-
-            // setRoom(onSuccess[1]);
-            // chess.load(onSuccess.fen);
-            // setPlayerColor(onSuccess.color === "w" ? "white" : "black");
-            // setOrientation(onSuccess.color === "w" ? "white" : "black");
-            // setPosition(chess.fen());
-            // setPlayerMove(chess.turn() === onSuccess.color);
-            // setRoom(roomId);
-          }
-        );
-      }
+      const response = await dispatch(getUser());
+      const userFromBack = response.payload;
+      socket.emit("reconnect", userFromBack);
     });
 
     socket.on("reconnect", (roomObject: any) => {
-      const storageRoomId: any = localStorage.getItem("roomId");
       console.log(roomObject);
-      console.log(storageRoomId);
 
-      setChess(roomObject[storageRoomId]);
-      console.log("CHESS AFTER SETCHES", chess);
-
-      // setPosition(chess.fen());
       console.log("ROOM OBJECT", roomObject);
+      chess.load(roomObject.board);
+      console.log("CHESS AFTER SETCHES", chess);
+      setPosition(roomObject.board);
+
+      setRoom(roomObject.roomId);
+      setPlayerColor(roomObject.playerColor === "w" ? "white" : "black");
+      setIsPlayersMove(roomObject.playerCanMove);
     });
 
     socket.on("move", (nextPosition: any, move: any) => {
@@ -71,8 +52,8 @@ function Board({ socket }: any) {
       if (nextPosition !== "invalid move") {
         chess.load(nextPosition);
         console.log("POSITION AFTER LOAD CLIENT 2", chess.ascii());
-        setPosition(chess.fen());
-        setIsPlayersMove(!isPlayersMove);
+        setPosition(nextPosition);
+        setIsPlayersMove(true);
       } else {
         console.log("invalid move");
       }
@@ -88,20 +69,15 @@ function Board({ socket }: any) {
     try {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
-      const userId = response.payload.user_id;
-      const userName = response.payload.user_name;
-
       socket.emit(
         "create-room",
         userFromBack,
-        (currentRoomID: any, firstMoveCheck: any) => {
+        (currentRoomID: string, firstMoveCheck: boolean) => {
           console.log(currentRoomID);
           firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
 
-          localStorage.setItem("roomId", currentRoomID);
-          localStorage.setItem("userId", userId);
-          localStorage.setItem("userName", userName);
-
+          chess.reset()
+          setPosition(chess.fen());
           setRoom(currentRoomID);
           setIsPlayersMove(firstMoveCheck);
           // const isFirstMove = createdRoom.player1.color === "w";
@@ -117,18 +93,15 @@ function Board({ socket }: any) {
     try {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
-      const userName = response.payload.user_name;
-      const userId = response.payload.user_id;
       const roomId: any = prompt("Enter room ID:");
-      localStorage.setItem("roomId", roomId);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("userName", userName);
       socket.emit(
         "join-room",
         roomId,
         userFromBack,
-        (success: boolean, firstMoveCheck: boolean) => {
+        (success: boolean, board: string, firstMoveCheck: boolean) => {
           if (success) {
+            chess.load(board);
+            setPosition(board);
             setRoom(roomId);
             setIsPlayersMove(firstMoveCheck);
             firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
@@ -143,6 +116,7 @@ function Board({ socket }: any) {
   };
 
   const handleMove = async ({ sourceSquare, targetSquare }: any) => {
+    setHighlightedSquares([]);
     console.log("SOURCE SQUARE", sourceSquare);
     console.log("TARGET SQUARE", targetSquare);
 
@@ -152,39 +126,47 @@ function Board({ socket }: any) {
     try {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
-      const userFromBackID = userFromBack.user_id;
-      if (isPlayersMove) {
-        const currentMove = {
-          from: sourceSquare,
-          to: targetSquare,
-          promotion: "q",
-        };
-        if (chess.move(currentMove)) {
-          setPosition(chess.fen());
-          console.log("AFTER MOVE FOR USER THAT MOVED", chess.ascii());
-          console.log("POSSIBLE MOVES", chess.moves());
+      const userFromBackID = userFromBack.id;
+      const currentMove = {
+        from: sourceSquare,
+        to: targetSquare,
+        promotion: "q",
+      };
+      if (chess.move(currentMove)) {
+        setPosition(chess.fen());
+        console.log("AFTER MOVE FOR USER THAT MOVED", chess.ascii());
+        console.log("POSSIBLE MOVES", chess.moves());
 
-          socket.emit(
-            "move",
-            userFromBackID,
-            currentMove,
-            room,
-            position,
-            currentMove,
-            (resp: boolean) => {
-              resp
-                ? console.log("move is made")
-                : console.log("something wrong");
-            }
-          );
-        }
-      } else {
-        alert("not valid move");
+        socket.emit(
+          "move",
+          userFromBackID,
+          room,
+          currentMove,
+          position,
+          (resp: boolean) => {
+            resp
+              ? console.log("move is made")
+              : console.log("something wrong");
+          }
+        );
+        setIsPlayersMove(false)
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+
+  const handlePieceClick = (square: Square) => {
+    const piece = chess.get(square);
+    if (piece) {
+      setSelectedSquare(square);
+      const possibleMoves = chess.moves({ square, verbose: true });
+      const highlightedSquares = possibleMoves.map((move) => move.to);
+      setHighlightedSquares(highlightedSquares);
+    }
+  };
+
   // const handleMove = async ({ sourceSquare, targetSquare }: any) => {
   //   try {
   //     const response = await dispatch(getUser());
@@ -224,6 +206,20 @@ function Board({ socket }: any) {
       <Chessboard
         position={position}
         onDrop={handleMove}
+        // allowDrag={function (obj) {
+        //   setHighlightedSquares(chess.moves({ square: obj.sourceSquare }));
+        //   return true;
+        // }}
+        onSquareClick={handlePieceClick}
+        squareStyles={{
+          ...(selectedSquare && {
+            [selectedSquare]: { backgroundColor: "orange" },
+          }),
+          ...highlightedSquares.reduce(
+            (obj, square) => ({ ...obj, [square]: { backgroundColor: "yellow" } }),
+            {}
+          ),
+        }}
         orientation={playerColor}
         width={600}
         darkSquareStyle={{ backgroundColor: "#B7C0D8" }}
