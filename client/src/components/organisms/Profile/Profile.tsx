@@ -8,6 +8,7 @@ import { getUserGames } from "../../../redux/thunk/profile/getUserGames";
 import EditNameForm from "../../atoms/EditNameForm/EditNameForm";
 import EditAvatarModal from "../../molecules/EditAvatarModal/EditAvatarModal";
 import { setProfileOwner } from "../../../redux/slicers/profile.slicer";
+import { Link } from "react-router-dom";
 
 export default function MainProfilePage() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ export default function MainProfilePage() {
   );
   console.log("profileOwner из профиля польз: ", profileOwner);
 
-  //todo тут массив объектов всех игр юзера (пока не используется)
+  //todo тут массив объектов всех игр юзера
   const userGames = useAppSelector(
     (state: RootState) => state.profileSlicer.userGames
   );
@@ -37,6 +38,11 @@ export default function MainProfilePage() {
   //todo объект со статистикой игр юзера
   const userStats = useAppSelector(
     (state: RootState) => state.profileSlicer.userStats
+  );
+
+  //todo массив объектов с инфой о друзьях юзера
+  const userFriends = useAppSelector(
+    (state: RootState) => state.profileSlicer.userFriends
   );
 
   //todo редактирование имени пользователя
@@ -62,76 +68,163 @@ export default function MainProfilePage() {
 
   return (
     <>
+      <h1>Profile Page</h1>
       <div className="main-profile-container">
-        <h1>Profile Page</h1>
-        <div className="profileContainer">
-          <div className="profileSubDiv">
-            <img
-              id="profileImage"
-              src={profileOwner.user_avatar}
-              alt="avatar"
-            />
-            {user.id === profileOwner.id ? (
-              <button
-                className="btn-edit-user"
-                onClick={() => setEditPic(true)}
-              >
-                <img alt="1111" src="/assets/profilePage/photo-edit-icon.svg" />
-              </button>
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="profileSubDiv">
-            <div className="profileChangeName">
-              {editName ? (
-                <EditNameForm setEditName={setEditName} />
-              ) : (
-                <>
-                  <h2 id="user-name">
-                    {user.user_name}
-                    {user.id === profileOwner.id ? (
-                      <button
-                        className="btn-edit-user"
-                        onClick={() => setEditName(true)}
-                      >
-                        <img
-                          alt="editName"
-                          src="/assets/profilePage/pencil-icon.svg"
-                          style={{ scale: "0.6" }}
-                        />
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </h2>
-                </>
-              )}
+        <div className="info-container">
+          <div className="profileContainer">
+            <div className="profileSubDiv">
+              <div className="img-wrapper">
+                <img
+                  id="profileImage"
+                  src={profileOwner.user_avatar}
+                  alt="avatar"
+                />
+                {user.id === profileOwner.id ? (
+                  <button
+                    className="btn-edit-user"
+                    onClick={() => setEditPic(true)}
+                  >
+                    <img
+                      alt="1111"
+                      src="/assets/profilePage/photo-edit-icon.svg"
+                    />
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
+            <div className="profileSubDiv">
+              <div className="profileChangeName">
+                {editName ? (
+                  <EditNameForm setEditName={setEditName} />
+                ) : (
+                  <>
+                    <h2 id="user-name">
+                      {user.user_name}
+                      {user.id === profileOwner.id ? (
+                        <button
+                          className="btn-edit-user"
+                          onClick={() => setEditName(true)}
+                        >
+                          <img
+                            alt="editName"
+                            src="/assets/profilePage/pencil-icon.svg"
+                            style={{ scale: "0.6" }}
+                          />
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </h2>
+                  </>
+                )}
+              </div>
 
-            <p id="user-rating">Rating: {profileOwner.user_rating}</p>
-            <div className="statsDiv">
-              <p>
-                <b>Game statistics:</b>
-              </p>
-              <p>Total games: {userStats.total}</p>
-              <p>Wins: {userStats.wins}</p>
-              <p>Losses: {userStats.losses}</p>
-              <p>Draws: {userStats.draws}</p>
-              <p>Total time: {userStats.totalDuration} min</p>
+              <p id="user-rating">Rating: {profileOwner.user_rating}</p>
+              <div className="statsDiv">
+                <p>
+                  <b>Statistics:</b>
+                </p>
+                <p>Total games: {userStats.total}</p>
+                <p>Wins: {userStats.wins}</p>
+                <p>Losses: {userStats.losses}</p>
+                <p>Draws: {userStats.draws}</p>
+                <p>Total time: {userStats.totalDuration} min</p>
+              </div>
             </div>
+          </div>
+          <div className="games-history">
+            <h2>Games history:</h2>
+            {userGames.map((game) => (
+              <li key={game.id} className="history-item">
+                <p>
+                  {game.winner === game.player1 && (
+                    <img
+                      src="/assets/profilePage/quality-badge-star-icon.svg"
+                      alt="win"
+                      style={{ width: "25px" }}
+                    />
+                  )}
+                  <b>{game.player1}</b>{" "}
+                  <img
+                    src="/assets/profilePage/versus-vs-icon.svg"
+                    alt="vs"
+                    style={{ width: "25px" }}
+                  />{" "}
+                  {game.winner === game.player2 && (
+                    <img
+                      src="/assets/profilePage/quality-badge-star-icon.svg"
+                      alt="win"
+                      style={{ width: "25px" }}
+                    />
+                  )}
+                  <b>{game.player2}</b>
+                </p>
+                {game.tie ? (
+                  <p>
+                    <img
+                      src="/assets/profilePage/hand-shake-icon.svg"
+                      alt="tie"
+                      style={{ width: "25px" }}
+                    />
+                    TIE
+                  </p>
+                ) : (
+                  ""
+                )}
+                <p>
+                  <img
+                    src="/assets/profilePage/history-icon.svg"
+                    alt="duration"
+                    style={{ width: "25px" }}
+                  />{" "}
+                  {game.duration} min
+                </p>
+                <p>
+                  <img
+                    src="/assets/profilePage/calendar-line-icon.svg"
+                    alt="duration"
+                    style={{ width: "25px" }}
+                  />{" "}
+                  {game.game_start_time.slice(0, -3)}
+                </p>
+              </li>
+            ))}
           </div>
         </div>
+        <div className="friends-container">
+          <h2>Friends:</h2>
+          {userFriends.map((friend) => (
+            <li className="friends-item">
+              <Link
+                to={`/profile/${friend.id}`}
+                key={friend.id}
+                className="friends-link"
+              >
+                <img
+                  src={friend.user_avatar}
+                  alt="avatar"
+                  className="img-in-list"
+                />
+                <div className="friend-info">
+                  <p>
+                    <b>{friend.user_name}</b>
+                  </p>
+                  <p>Rating: {friend.user_rating}</p>
+                </div>
+              </Link>
+              <button
+                className="btn-edit-user"
+                style={{ margin: "7px 0px 0px 0px" }}
+              >
+                <img alt="cancel" src="/assets/profilePage/cancel-icon.svg" />
+              </button>
+            </li>
+          ))}
+        </div>
       </div>
-      <div className="buttonHistory">
-        {/* <Button
-          text="History of the last games"
-          icon="/assets/browser.png"
-          width="360px"
-          height="100px"
-          className="play-online"
-        /> */}
-      </div>
+
       {editPic && <EditAvatarModal setEditPic={setEditPic} />}
     </>
   );
