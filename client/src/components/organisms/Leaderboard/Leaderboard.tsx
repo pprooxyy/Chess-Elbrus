@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getGamesForLeaders } from "../../../redux/thunk/Leaders/getGamesForLeaders";
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import "./Leaderboard.css";
-import { IGame } from "../../../types";
+import { IStatForLeaders } from "../../../types";
 
 export default function Leaderboard() {
   const dispatch = useAppDispatch();
