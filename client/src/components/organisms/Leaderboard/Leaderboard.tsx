@@ -1,22 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getGamesForLeaders } from "../../../redux/thunk/Leaders/getGamesForLeaders";
+import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import "./Leaderboard.css";
+import { IGame } from "../../../types";
 
 export default function Leaderboard() {
-  const generateRandomData = () => {
-    const data = [];
-    for (let i = 1; i <= 10; i++) {
-      const player = {
-        name: `Player ${i}`,
-        totalGames: Math.floor(Math.random() * 100),
-        win: Math.floor(Math.random() * 50),
-        lose: Math.floor(Math.random() * 50),
-        draw: Math.floor(Math.random() * 10),
-        score: Math.floor(Math.random() * 100),
-      };
-      data.push(player);
-    }
-    return data;
-  };
+  const dispatch = useAppDispatch();
 
   const images = [
     "/assets/prize-icons/1st-prize-icon.svg",
@@ -24,7 +13,13 @@ export default function Leaderboard() {
     "/assets/prize-icons/3rd-prize-icon.svg",
   ];
 
-  const [playersData] = useState(generateRandomData());
+  useEffect(() => {
+    dispatch(getGamesForLeaders());
+  }, [dispatch]);
+
+  const games = useAppSelector((state) => state.leaderSlice.games);
+
+  console.log("leaderState: -------->", games);
 
   return (
     <div className="lider-table">
@@ -32,7 +27,7 @@ export default function Leaderboard() {
         <caption>Top 10 Players</caption>
         <thead>
           <tr>
-            <th>Place</th>
+            <th>#</th>
             <th>Name</th>
             <th>Total Games</th>
             <th>Win</th>
@@ -42,7 +37,7 @@ export default function Leaderboard() {
           </tr>
         </thead>
         <tbody>
-          {playersData.map((player, index) => (
+          {games.map((game, index) => (
             <tr key={index}>
               <td>
                 {index + 1 === 1 ? (
@@ -67,12 +62,12 @@ export default function Leaderboard() {
                   index + 1
                 )}
               </td>
-              <td>{player.name}</td>
-              <td>{player.totalGames}</td>
-              <td>{player.win}</td>
-              <td>{player.lose}</td>
-              <td>{player.draw}</td>
-              <td>{player.score}</td>
+              <td>{game.user_name}</td>
+              <td>{game.total}</td>
+              <td>{game.wins}</td>
+              <td>{game.losses}</td>
+              <td>{game.draws}</td>
+              <td>{game.user_rating}</td>
             </tr>
           ))}
         </tbody>

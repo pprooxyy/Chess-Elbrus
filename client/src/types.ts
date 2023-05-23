@@ -50,12 +50,12 @@ export interface ILoginState {
 //! l-OO-ser ?!
 export interface IGame {
   id: number;
-  player1: string;
-  player2: string;
-  tie: boolean;
-  winner: string;
-  game_start_time: string;
-  duration: number;
+  user_name: string;
+  total: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  user_rating: number;
 }
 //!
 
@@ -81,4 +81,12 @@ export interface IProfileState {
   userStats: IGameStats;
   isLoading: boolean;
   error: string | null | undefined;
+}
+
+//? Leaders Slicer
+
+export interface ILeaderState {
+  games: IGame[];
+  isLoading: boolean;
+  error: string | null;
 }
