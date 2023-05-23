@@ -35,11 +35,14 @@ function App() {
 
   return (
     <div className="App">
+      <Routes>
+        <Route path="/" element={<StartPage />} />
+      </Routes>
       {loadingAuth ? (
         <h1>LOADING...</h1>
       ) : (
         <Routes>
-          <Route path="/" element={<StartPage />} />
+          
           <Route path="/home" element={<MainPage />} />
           <Route path="/friends" element={<FriendPage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />

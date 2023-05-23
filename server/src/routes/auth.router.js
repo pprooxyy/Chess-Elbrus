@@ -8,7 +8,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { user_name, user_email, user_password } = req.body;
+
+  try {
+    const { user_name, user_email, user_password } = req.body;
   const hashPass = await bcrypt.hash(user_password, 10);
   const newUser = await User.findOrCreate({
     where: { user_email },
@@ -30,6 +32,7 @@ router.post("/register", async (req, res) => {
     req.session.save();
     res.json({
       msg: "User registered successfully",
+      isAuthenticated: true,
       user: {
         id: newUser[0].dataValues.id,
         user_name: newUser[0].dataValues.user_name,
@@ -40,6 +43,11 @@ router.post("/register", async (req, res) => {
   } else {
     res.json({ msg: "User already exists" });
   }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({msg: "error"})
+  }
+  
 });
 
 router.post("/login", async (req, res) => {
@@ -62,6 +70,7 @@ router.post("/login", async (req, res) => {
       // req.session.save(); //!
       res.json({
         msg: "Success",
+        isAuthenticated: true,
         user: {
           id: user.dataValues.id,
           user_name: user.dataValues.user_name,
@@ -79,8 +88,8 @@ router.post("/login", async (req, res) => {
 
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
-    res.clearCookie("Cookie");
-    res.json({ user: "" });
+    res.clearCookie("cookie");
+    res.end()
   });
 });
 

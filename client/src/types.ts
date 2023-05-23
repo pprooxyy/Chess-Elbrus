@@ -67,9 +67,17 @@ export interface IGameStats {
   totalDuration: number;
 }
 
+export interface IUserFriend {
+  id: number;
+  user_name: string;
+  user_rating: number;
+  user_avatar: string;
+}
+
 export interface IProfileState {
   profileOwner: IUserRedux;
   userGames: IGame[];
+  userFriends: IUserFriend[];
   userStats: IGameStats;
   isLoading: boolean;
   error: string | null | undefined;

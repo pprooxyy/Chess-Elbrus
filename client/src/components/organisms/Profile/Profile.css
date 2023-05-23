@@ -1,5 +1,101 @@
+.main-profile-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+}
+
+.profileContainer {
+  margin: 0 20px 10px 220px;
+  padding: 10px;
+  display: flex;
+  flex: auto;
+  justify-content: left;
+  border-radius: 10px;
+  background-color: #e8edf9;
+  border: 2px solid grey;
+}
+
+.games-history {
+  margin: 10px 20px 0 220px;
+  background-color: #e8edf9;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  border: 2px solid grey;
+  /* width: 100%; */
+}
+
+.history-item {
+  background-color: #e8edf9;
+  list-style-type: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 0px auto 10px auto;
+  padding: 5px;
+  width: 95%;
+  font-size: 26px;
+}
+
+.friends-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #e8edf9;
+  width: 25%;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  gap: 10px;
+  margin-right: 10px;
+}
+
+.friends-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #e8edf9;
+  list-style-type: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 0px auto 0px auto;
+  padding: 10px;
+  width: 95%;
+  font-size: 22px;
+}
+
+.friends-item:hover {
+  border: 2px solid black;
+}
+
+.friends-link {
+  display: flex;
+}
+
+.friend-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.img-in-list {
+  width: 50px;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.img-wrapper {
+  width: 100%;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 #profileImage {
-  width: 250px;
+  width: 100%;
   border-radius: 5px;
 }
 
@@ -10,7 +106,7 @@
 .btn-edit-user {
   border: none;
   width: 40px;
-  background-color: #b7c0d8;
+  background-color: #e8edf9;
 }
 
 .btn-edit-user img {
@@ -22,17 +118,11 @@
   transform: scale(1.1);
 }
 
-.profileContainer {
-  margin: 0 20px 0 220px;
-  display: flex;
-  justify-content: left;
-  border-radius: 10px;
-  background-color: #b7c0d8;
-}
-
 .profileSubDiv {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  margin: 0px 10px 5px 10px;
+  width: 50%;
 }
 
 #user-name {

@@ -20,6 +20,7 @@ const initialUserStats = {
 const initialState: IProfileState = {
   profileOwner: initialProfileOwner,
   userGames: [],
+  userFriends: [],
   userStats: initialUserStats,
   isLoading: false,
   error: null,
@@ -32,6 +33,13 @@ const profileSlicer = createSlice({
     setProfileOwner(state, action) {
       state.profileOwner = action.payload;
     },
+    delFriend(state, action) {
+      state.userFriends = state.userFriends.filter((friend) => {
+        if (friend.id !== action.payload) {
+          return friend;
+        }
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -41,6 +49,7 @@ const profileSlicer = createSlice({
       .addCase(getUserGames.fulfilled, (state, action) => {
         state.profileOwner = action.payload.profileOwner;
         state.userGames = action.payload.userGames;
+        state.userFriends = action.payload.userFriends;
         state.userStats = action.payload.userStats;
         state.isLoading = false;
         state.error = null;
@@ -48,6 +57,7 @@ const profileSlicer = createSlice({
       .addCase(getUserGames.rejected, (state, action) => {
         state.profileOwner = initialProfileOwner;
         state.userGames = [];
+        state.userFriends = [];
         state.userStats = initialUserStats;
         state.isLoading = false;
         state.error = action.error.message;
@@ -55,5 +65,5 @@ const profileSlicer = createSlice({
   },
 });
 
-export const { setProfileOwner } = profileSlicer.actions;
+export const { setProfileOwner, delFriend } = profileSlicer.actions;
 export default profileSlicer.reducer;
