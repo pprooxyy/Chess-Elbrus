@@ -9,6 +9,7 @@ const authRouter = require("./routes/auth.router");
 const gameRouter = require("./routes/game.router");
 const profileRouter = require("./routes/profile.router");
 const friendRouter = require("./routes/friend.router");
+const leadersRouter = require("./routes/leaders.router");
 
 const socketModule = require("./sockets/socket");
 const chatSocket = require("./sockets/chat.socket");
@@ -69,6 +70,7 @@ app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/", gameRouter);
 app.use("/friends", friendRouter);
+app.use("/leaders", leadersRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);

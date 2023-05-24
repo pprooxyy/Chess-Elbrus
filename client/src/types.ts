@@ -57,6 +57,7 @@ export interface IGame {
   game_start_time: string;
   duration: number;
 }
+
 //!
 
 export interface IGameStats {
@@ -81,4 +82,22 @@ export interface IProfileState {
   userStats: IGameStats;
   isLoading: boolean;
   error: string | null | undefined;
+}
+
+//? Leaders Slicer
+
+export interface ILeaderState {
+  games: IStatForLeaders[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface IStatForLeaders {
+  id: number;
+  user_name: string;
+  total: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  user_rating: number;
 }
