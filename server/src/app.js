@@ -9,7 +9,7 @@ const authRouter = require("./routes/auth.router");
 const gameRouter = require("./routes/game.router");
 const profileRouter = require("./routes/profile.router");
 const friendRouter = require("./routes/friend.router");
-const historyRouter = require('./routes/history.router')
+const historyRouter = require("./routes/history.router");
 const socketModule = require("./sockets/socket");
 const chatSocket = require("./sockets/chat.socket");
 
@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 const sessionConfig = {
-  name: "Cookie-Chess",
+  name: "cookie",
   store: new FileStore(),
   secret: process.env.SESSION_SECRET ?? "секретное слово",
   resave: false,
@@ -62,7 +62,6 @@ const io = require("socket.io")(3002, {
     allowedHeaders: ["Content-Type"],
   },
 });
-
 
 socketModule(io, rooms);
 chatSocket(io);
