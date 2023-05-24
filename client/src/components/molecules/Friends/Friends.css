@@ -32,9 +32,6 @@
   font-size: 65px;
 }
 
-.FriendVsFriend {
-  font-size: 20px;
-}
 
 button {
   width: 150px;
@@ -53,7 +50,7 @@ button {
 }
 
 
-.friends-container {
+.friend-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,6 +97,14 @@ button {
   padding: 5px;
   margin-right: 10px;
   background-color: #d5d6d8;
+  transition: border-color 0.3s ease;
+  border: 5px solid transparent;
+  border-radius: 10px;
+}
+
+.friend-input:hover {
+  border-image: linear-gradient(to right, rgb(249, 118, 249), rgb(103, 0, 0));
+  border-image-slice: 2;
 }
 
 .add-button {
@@ -146,7 +151,7 @@ button {
   max-width: 800px;
 }
 
-.friend-card{ 
+.friend-card {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -157,10 +162,18 @@ button {
   padding: 15px;
   border-radius: 15px;
   box-shadow: 2px 2px 13px 2px rgba(0, 0, 0, 0.36);
+  border-radius: 15px;
+  box-shadow: 2px 2px 13px 2px rgba(0, 0, 0, 0.36);
+  transition: transform 0.3s ease;
+}
+
+.friend-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .add-button {
-  background-color: #272f36;
+  background-color: #030303;
   color: #ebe3e3;
   border: none;
   padding: 5px 10px;
@@ -168,8 +181,8 @@ button {
   cursor: pointer;
 }
 
-.custom-button{
-  background-color: #272f36;
+.custom-button1 {
+  background-color: #574d4d;
   color: #fff;
   border: none;
   padding: 5px 10px;
@@ -177,4 +190,22 @@ button {
   cursor: pointer;
   border-radius: 10px;
   width: 70px;
+}
+
+.custom-button2 {
+  background-color: #242a30;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 70px;
+}
+
+.line-up {
+  background-color: #000;
+  height: 1px;
+  width: 100%;
+  margin: 10px 0;
 }

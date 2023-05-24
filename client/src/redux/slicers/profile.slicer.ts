@@ -33,6 +33,13 @@ const profileSlicer = createSlice({
     setProfileOwner(state, action) {
       state.profileOwner = action.payload;
     },
+    delFriend(state, action) {
+      state.userFriends = state.userFriends.filter((friend) => {
+        if (friend.id !== action.payload) {
+          return friend;
+        }
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -56,5 +63,5 @@ const profileSlicer = createSlice({
   },
 });
 
-export const { setProfileOwner } = profileSlicer.actions;
+export const { setProfileOwner, delFriend } = profileSlicer.actions;
 export default profileSlicer.reducer;

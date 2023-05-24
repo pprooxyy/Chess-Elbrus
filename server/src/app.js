@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 const sessionConfig = {
-  name: "cookie",
+  name: "Cookie-Chess",
   store: new FileStore(),
   secret: process.env.SESSION_SECRET ?? "секретное слово",
   resave: false,
