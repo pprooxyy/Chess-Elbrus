@@ -3,6 +3,7 @@ const { Game, User } = require("../../db/models");
 const { Op } = require("sequelize");
 
 router.get("/", async (req, res) => {
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   try {
     const allUsers = await User.findAll({
       order: [["user_rating", "DESC"]],

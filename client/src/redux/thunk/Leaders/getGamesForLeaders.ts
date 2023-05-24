@@ -8,7 +8,7 @@ export const getGamesForLeaders = createAsyncThunk<IStatForLeaders[], void>(
       const response = await fetch("http://localhost:3001/leaders", {
         credentials: "include",
       });
-      const result: IStatForLeaders[] = await response.json();
+      const result = await response.json();
 
       console.log("RESULT from getGames thunk", result);
       return result;

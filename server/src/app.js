@@ -9,9 +9,10 @@ const authRouter = require("./routes/auth.router");
 const gameRouter = require("./routes/game.router");
 const profileRouter = require("./routes/profile.router");
 const friendRouter = require("./routes/friend.router");
-const historyRouter = require('./routes/history.router')
+const historyRouter = require("./routes/history.router");
 const socketModule = require("./sockets/socket");
 const chatSocket = require("./sockets/chat.socket");
+const leadersRouter = require("./routes/leaders.router");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -63,7 +64,6 @@ const io = require("socket.io")(3002, {
   },
 });
 
-
 socketModule(io, rooms);
 chatSocket(io);
 
@@ -72,6 +72,7 @@ app.use("/profile", profileRouter);
 app.use("/", gameRouter);
 app.use("/friends", friendRouter);
 app.use("/history", historyRouter);
+app.use("/leaders", leadersRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);
