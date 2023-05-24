@@ -1,7 +1,8 @@
 .game-container {
   display: flex;
   flex-direction: column;
-  margin-left: 40px;
+  margin-left: 60px;
+  margin-top: 40px;
   /* border: 5px gray solid; */
   gap: 20px;
 }
