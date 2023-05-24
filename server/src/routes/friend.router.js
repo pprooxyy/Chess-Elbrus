@@ -36,7 +36,8 @@ router.get("/", async (req, res) => {
             arr.push({
                 id: user.id,
                 name: user.user_name,
-                avatar: user.user_avatar
+                avatar: user.user_avatar,
+                rating: user.user_rating
             })
         }
         res.json(arr);
@@ -100,17 +101,18 @@ router.post("/", async (req, res) => {
                 friendArr.push({
                     id: user.id,
                     name: user.user_name,
-                    avatar: user.user_avatar
+                    avatar: user.user_avatar,
+                    rating: user.user_rating
                 })
             } else {
                 userArr.push({
                     id: user.id,
                     name: user.user_name,
-                    avatar: user.user_avatar
+                    avatar: user.user_avatar,
+                    rating: user.user_rating
                 })
             }
         }
-
 
         res.json({ users: userArr, friends: friendArr }).status(201);
         // const existingFriend = await Friend.findOne({
