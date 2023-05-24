@@ -208,7 +208,7 @@ function Board({ socket }: any) {
         />
       </div>
       <div>
-        <div className="button-container">
+        <div className="game-button-container">
           <button onClick={handleCreateRoom} style={{ marginLeft: "10px" }}>
             Create Room
           </button>
