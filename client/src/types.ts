@@ -82,3 +82,21 @@ export interface IProfileState {
   isLoading: boolean;
   error: string | null | undefined;
 }
+
+export interface IInitalHistory {
+    id: number;
+    player1: string;
+    player1Id: number;
+    player2: string;
+    player2Id: number;
+    tie: boolean;
+    winner: string;
+    winnerId: number;
+    duration: number;
+    game_start_time: string;
+}
+export interface IHistoryState{
+  history: IInitalHistory[]
+  isLoading: boolean;
+  error: string | null | undefined;
+}

@@ -29,14 +29,26 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
   ) => {
     setInputValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
+  
   const isAuth = useAppSelector(state => state.authSlicer.isAuthenticated)
   const message = useAppSelector(state => state.authSlicer.msg)
+
+  const [displayMessage, setDisplayMessage] = useState(true);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginUser(inputValues));
+    
+
   };
+  useEffect(() => {
+    if (message) {
+      setDisplayMessage(true);
+      setTimeout(() => {
+        setDisplayMessage(false);
+      }, 3000);
+    }
+  }, [message]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,6 +69,7 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
             placeholder="email"
           />
           <br />
+          
           <input
             type="password"
             name="user_password"
@@ -64,8 +77,12 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
             onChange={(e) => inputsChangeHandler(e, setInputValues)}
             placeholder="password"
           />
-          <br />
-          {!isAuth ? (<div>{message} </div>) : (<div>{message} </div> ) }
+          <br/>
+          { displayMessage && isAuth && <div className="messageDiv">{message} </div>} 
+          { 
+            displayMessage && !isAuth && <div className="messageDiv">{message} </div>
+          }
+         
           <div className="button-container">
             <Button text="Submit" width="150px" height="50px" />
             <Button
@@ -74,6 +91,7 @@ export default function LoginModal({ setShowLoginModal }: loginModalProps) {
               height="50px"
               onClick={() => setShowLoginModal(false)}
             />
+            
           </div>
         </form>
       </div>

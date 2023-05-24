@@ -97,7 +97,6 @@ const authSlicer = createSlice({
         state.error = null;
       })
       .addCase(editUser.rejected, (state, action) => {
-        // state.user = action.payload;
         state.isLoading = false;
         state.error = action.error.message;
       });
