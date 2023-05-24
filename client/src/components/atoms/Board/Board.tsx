@@ -176,19 +176,19 @@ function Board({ socket }: any) {
   };
 
   return (
-    <div className="game-container">
-      <div className="board-container">
-        <Chessboard
-          position={position}
-          onDrop={handleMove}
-          // allowDrag={function (obj) {
-          //   setHighlightedSquares(chess.moves({ square: obj.sourceSquare }));
-          //   return true;
-          // }}
-          onSquareClick={handlePieceClick}
-          squareStyles={{
-            ...(selectedSquare && {
-              [selectedSquare]: { backgroundColor: "orange" },
+    <div>
+      <Chessboard
+        position={position}
+        onDrop={handleMove}
+        onSquareClick={handlePieceClick}
+        squareStyles={{
+          ...(selectedSquare && {
+            [selectedSquare]: { backgroundColor: "#7b61ff" },
+          }),
+          ...highlightedSquares.reduce(
+            (obj, square) => ({
+              ...obj,
+              [square]: { backgroundColor: "#7b61ff", opacity: "0.5" },
             }),
             ...highlightedSquares.reduce(
               (obj, square) => ({
