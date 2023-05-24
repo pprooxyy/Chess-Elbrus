@@ -5,16 +5,18 @@ import { useAppDispatch } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 function Board({ socket }: any) {
+  
   const [chess, setChess] = useState(new Chess());
   const [room, setRoom] = useState("");
   const [position, setPosition] = useState(
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   );
-  const [isPlayersMove, setIsPlayersMove] = useState(false);
+  
+  const [isPlayersMove, setIsPlayersMove] = useState(true);
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>("white");
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-
+  
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -48,15 +50,16 @@ function Board({ socket }: any) {
         chess.ascii()
       );
       console.log("NEXT POSITION CAME TO CLENT 2", nextPosition);
-
-      if (nextPosition !== "invalid move") {
-        chess.load(nextPosition);
-        console.log("POSITION AFTER LOAD CLIENT 2", chess.ascii());
-        setPosition(nextPosition);
-        setIsPlayersMove(true);
-      } else {
-        console.log("invalid move");
-      }
+      // if(isPlayersMove){ 
+        if (nextPosition !== "invalid move") {
+          chess.load(nextPosition);
+          console.log("POSITION AFTER LOAD CLIENT 2", chess.ascii());
+          setPosition(nextPosition);
+          setIsPlayersMove(!isPlayersMove);
+        } else {
+          console.log("invalid move");
+        }
+      // }
     });
 
     // return () => {
@@ -122,37 +125,38 @@ function Board({ socket }: any) {
 
     console.log("FIRST BOARD WHEN MOVING PIECE", chess.ascii());
     console.log("POSSIBLE MOVES", chess.moves());
-
-    try {
-      const response = await dispatch(getUser());
-      const userFromBack = response.payload;
-      const userFromBackID = userFromBack.id;
-      const currentMove = {
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: "q",
-      };
-      if (chess.move(currentMove)) {
-        setPosition(chess.fen());
-        console.log("AFTER MOVE FOR USER THAT MOVED", chess.ascii());
-        console.log("POSSIBLE MOVES", chess.moves());
-
-        socket.emit(
-          "move",
-          userFromBackID,
-          room,
-          currentMove,
-          position,
-          (resp: boolean) => {
-            resp
-              ? console.log("move is made")
-              : console.log("something wrong");
-          }
-        );
-        setIsPlayersMove(false)
+    if (isPlayersMove) {
+      try {
+        const response = await dispatch(getUser());
+        const userFromBack = response.payload;
+        const userFromBackID = userFromBack.id;
+        const currentMove = {
+          from: sourceSquare,
+          to: targetSquare,
+          promotion: "q",
+        };
+        if (chess.move(currentMove)) {
+          setPosition(chess.fen());
+          console.log("AFTER MOVE FOR USER THAT MOVED", chess.ascii());
+          console.log("POSSIBLE MOVES", chess.moves());
+  
+          socket.emit(
+            "move",
+            userFromBackID,
+            room,
+            currentMove,
+            position,
+            (resp: boolean) => {
+              resp
+                ? console.log("move is made")
+                : console.log("something wrong");
+            }
+          );
+          setIsPlayersMove(true)
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
