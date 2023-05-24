@@ -3,6 +3,7 @@ import { getGamesForLeaders } from "../../../redux/thunk/Leaders/getGamesForLead
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import "./Leaderboard.css";
 import { IStatForLeaders } from "../../../types";
+import { Link } from "react-router-dom";
 
 export default function Leaderboard() {
   const dispatch = useAppDispatch();
@@ -62,7 +63,11 @@ export default function Leaderboard() {
                   index + 1
                 )}
               </td>
-              <td>{game.user_name}</td>
+              <td>
+                <Link to={`/profile/${game.id}`} key={game.id}>
+                  {game.user_name}
+                </Link>
+              </td>
               <td>{game.total}</td>
               <td>{game.wins}</td>
               <td>{game.losses}</td>
