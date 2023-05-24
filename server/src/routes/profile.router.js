@@ -73,7 +73,7 @@ router.get("/:id", async (req, res) => {
 
     //* формируем объект хозяина страницы в удобном формате
     const profileOwner = {
-      id: profileOwnerFromDB.id,
+      id: profileOwnerFromDB?.id,
       user_name: profileOwnerFromDB.user_name,
       user_rating: profileOwnerFromDB.user_rating,
       user_avatar: profileOwnerFromDB.user_avatar,

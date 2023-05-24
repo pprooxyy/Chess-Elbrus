@@ -26,6 +26,7 @@ export default function RegisterModal({
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  
 
   const inputsChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -37,15 +38,26 @@ export default function RegisterModal({
   const isAuth = useAppSelector(state => state.authSlicer.isAuthenticated)
   const message = useAppSelector(state => state.authSlicer.msg)
   
+  const [displayMessage, setDisplayMessage] = useState(true);
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Действия при отправке формы
+    
     dispatch(registerUser(inputValues));
+    
   };
+  useEffect(() => {
+    if (message) {
+      setDisplayMessage(true);
+      setTimeout(() => {
+        setDisplayMessage(false);
+      }, 3000);
+    }
+  }, [message]);
   // redirect to home if user is logged in
   useEffect(() => {
     setTimeout(() => {
-      console.log(isAuth, 'is auth in settimeout ')
       if (isAuth) navigate('/home')
     }, 1000)
   }, [isAuth, navigate])
@@ -78,7 +90,10 @@ export default function RegisterModal({
             placeholder="password"
           />
           <br />
-          {!isAuth ? (<div>{message} </div>) : (<div>{message} </div> ) }
+          { displayMessage && isAuth && <div className="messageDiv">{message} </div>} 
+          { 
+            displayMessage && !isAuth && <div className="messageDiv">{message} </div>
+          }
           <div className="button-container">
             <Button text="Submit" width="150px" height="40px" />
             <Button
