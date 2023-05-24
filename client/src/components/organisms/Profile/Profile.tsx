@@ -128,7 +128,7 @@ export default function MainProfilePage() {
                 ) : (
                   <>
                     <h2 id="user-name">
-                      {user.user_name}
+                      {profileOwner.user_name}
                       {user.id === profileOwner.id ? (
                         <button
                           className="btn-edit-user"
