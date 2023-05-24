@@ -62,6 +62,8 @@ const io = require("socket.io")(3002, {
     allowedHeaders: ["Content-Type"],
   },
 });
+
+
 socketModule(io, rooms);
 chatSocket(io);
 

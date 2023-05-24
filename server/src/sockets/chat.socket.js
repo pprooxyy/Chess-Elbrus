@@ -1,9 +1,10 @@
 function setupChatSocket(chatSocket) {
   let users = [];
-  chatSocket.on("connection", (socket) => {
+  chatSocket.on("connect", (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
     socket.on("message", (data) => {
-      chatSocket.emit("messageResponse", data);
+      console.log(data);
+      socket.broadcast.emit("messageResponse", data);
     });
 
     socket.on("typing", (data) =>
@@ -12,13 +13,18 @@ function setupChatSocket(chatSocket) {
 
     socket.on("newUser", (data) => {
       users.push(data);
-      chatSocket.emit("newUserResponse", users);
+
+      socket.broadcast.emit("messageResponse", {
+        notification: true,
+        text: `new user ${data.name} connected`,
+      });
+      // socket.broadcast.emit("newUserResponse", users);
     });
 
     socket.on("disconnect", () => {
       console.log("🔥: A user disconnected");
       users = users.filter((user) => user.socketID !== socket.id);
-      chatSocket.emit("newUserResponse", users);
+      socket.broadcast.emit("newUserResponse", users);
       socket.disconnect();
     });
   });

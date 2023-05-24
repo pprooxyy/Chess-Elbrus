@@ -1,21 +1,32 @@
 import React, { useState } from "react";
 
-function ChatFooter({ socket }: any) {
+import { useAppDispatch } from "../../../redux/typesRedux";
+import { getUser } from "../../../redux/thunk/auth/getUser";
+
+function ChatFooter({ socket, messages, setMessages }: any) {
   const [message, setMessage] = useState("");
 
-  const handleSendMessage = (e: any) => {
-    const userName = localStorage.getItem("userName");
-    const userId = localStorage.getItem("userId");
-    const roomId = localStorage.getItem("roomId");
+  const dispatch = useAppDispatch();
+
+  const handleSendMessage = async (e: any) => {
     e.preventDefault();
-    if (message.trim() && userName) {
-      socket.emit("message", {
+    if (!message.trim()) return;
+
+    const response = await dispatch(getUser());
+    const userFromBack = response.payload;
+
+    socket.emit("message", {
+      text: message,
+      name: userFromBack.user_name,
+      id: `${userFromBack.id}`,
+      socketID: socket.id,
+    });
+    setMessages((value: any) => [...value, {
         text: message,
-        name: userName,
-        id: `${userId}`,
+        name: "You",
+        id: `${userFromBack.id}`,
         socketID: socket.id,
-      });
-    }
+      }]);
     setMessage("");
   };
   return (
