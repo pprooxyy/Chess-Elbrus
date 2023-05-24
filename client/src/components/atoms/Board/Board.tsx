@@ -19,6 +19,7 @@ function Board({ socket }: any) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log("==========================================");
     console.log("MOOVE", isPlayersMove);
     console.log(chess);
 
@@ -26,6 +27,7 @@ function Board({ socket }: any) {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
       socket.emit("reconnect", userFromBack);
+
     });
 
     socket.on("reconnect", (roomObject: any) => {
@@ -60,12 +62,11 @@ function Board({ socket }: any) {
       }
       // }
     });
-
     // return () => {
     //   socket.off("room-updated");
     //   socket.off("move");
     // };
-  }, [chess, isPlayersMove, position, socket]);
+  }, [chess, dispatch, isPlayersMove, socket]);
 
   const handleCreateRoom = async () => {
     try {
@@ -119,6 +120,7 @@ function Board({ socket }: any) {
 
   const handleMove = async ({ sourceSquare, targetSquare }: any) => {
     setHighlightedSquares([]);
+    setSelectedSquare(null);
     console.log("SOURCE SQUARE", sourceSquare);
     console.log("TARGET SQUARE", targetSquare);
 

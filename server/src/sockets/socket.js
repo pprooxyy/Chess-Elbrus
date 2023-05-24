@@ -3,16 +3,16 @@ const { Chess } = require("chess.js");
 const Game = require("../lib/Room.class");
 
 module.exports = (io, rooms) => {
-  io.on("connect", (socket) => {
-    socket.on("reconnect", (previousData, callback) => {
-      if (!previousData) return;
+  io.on("connection", (socket) => {
+    socket.on("reconnect", (userData, callback) => {
+      if (!userData) return;
 
-      console.log("LOG_DATA_FOR_RECONNECT", previousData);
-      const roomArray = findRoomByPlayerId(previousData.id, rooms);
+      console.log("LOG_DATA_FOR_RECONNECT", userData);
+      const roomArray = findRoomByPlayerId(userData.id, rooms);
       console.log("room array", roomArray);
       if (roomArray) {
         const room = roomArray[1];
-        const player = room.getPlayerById(previousData.id);
+        const player = room.getPlayerById(userData.id);
 
         const roomObject = {
           roomId: room.roomId,
