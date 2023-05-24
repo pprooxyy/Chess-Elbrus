@@ -1,12 +1,15 @@
 import React from "react";
 import Button from "../../atoms/Button/Button";
 import "./MainPagePlaySection.css";
+import { useNavigate } from "react-router-dom";
 
 function MainPlaySection() {
   const boardStyles = {
     width: 496,
     height: 496,
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="main-play-section">
@@ -26,6 +29,7 @@ function MainPlaySection() {
             width="300px"
             height="100px"
             className="play-online"
+            onClick={() => navigate("/game")}
           />
           <Button
             text="Play Computer"
