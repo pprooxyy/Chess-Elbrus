@@ -86,18 +86,19 @@ export interface IProfileState {
 
 
 export interface IInitalHistory {
-    id: number;
-    player1: string;
-    player1Id: number;
-    player2: string;
-    player2Id: number;
-    tie: boolean;
-    winner: string;
-    winnerId: number;
-    duration: number;
-    game_start_time: string;
+  game_fen: string | undefined;
+  id: number;
+  player1: string;
+  player1Id: number;
+  player2: string;
+  player2Id: number;
+  tie: boolean;
+  winner: string;
+  winnerId: number;
+  duration: number;
+  game_start_time: string;
 }
-export interface IHistoryState{
+export interface IHistoryState {
   history: IInitalHistory[]
   isLoading: boolean;
   error: string | null | undefined;

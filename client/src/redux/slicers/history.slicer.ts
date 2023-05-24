@@ -10,13 +10,14 @@ const initialHistory = {
   player2Id: 0,
   tie: false,
   winner: '',
-  winnerId: 0, 
+  winnerId: 0,
   duration: 0,
+  game_fen: '',
   game_start_time: '',
 };
 
 const initialState: IHistoryState = {
-  history : [],
+  history: [],
   isLoading: false,
   error: null,
 }

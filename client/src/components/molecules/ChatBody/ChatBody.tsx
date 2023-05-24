@@ -11,7 +11,7 @@ function ChatBody({ messages }: ChatBodyProps) {
         {messages.map((message) => {
           if (message.notification) {
             return (
-              <div className="message__chats">
+              <div className="message__chats" key={Math.random()}>
                 <div className="message__notification">
                   <p>{message.text}</p>
                 </div>
@@ -19,7 +19,7 @@ function ChatBody({ messages }: ChatBodyProps) {
             );
           } else if (message.name === "You") {
             return (
-              <div className="message__chats">
+              <div className="message__chats" key={Math.random()}>
                 <p className="sender__name">You</p>
                 <div className="message__sender">
                   <p>{message.text}</p>
@@ -28,7 +28,7 @@ function ChatBody({ messages }: ChatBodyProps) {
             );
           } else {
             return (
-              <div className="message__chats">
+              <div className="message__chats" key={Math.random()}>
                 <p>{message.name}</p>
                 <div className="message__recipient">
                   <p>{message.text}</p>

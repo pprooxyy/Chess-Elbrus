@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { Game, Move, User } = require("../../db/models");
 
-const getNameById = async(userId) => {
+const getNameById = async (userId) => {
   try {
     const user = await User.findByPk(userId);
     if (user) {
@@ -13,9 +13,9 @@ const getNameById = async(userId) => {
     console.error("Error fetching player name:", error);
     return "";
   }
-}; 
+};
 
-const calculateDuration= (startTime, endTime) => {
+const calculateDuration = (startTime, endTime) => {
   const start = new Date(startTime);
   const end = new Date(endTime);
   const durationInMilliseconds = end - start;
@@ -24,13 +24,13 @@ const calculateDuration= (startTime, endTime) => {
   return durationInMinutes;
 }
 
-router.get('/', async (req, res) =>  {
+router.get('/', async (req, res) => {
   try {
     const rawGames = await Game.findAll({
       raw: true,
     });
     if (rawGames.length === 0) {
-        return res.json([]);
+      return res.json([]);
     }
 
     const promisedGames = rawGames.map(async (game) => {
@@ -44,12 +44,13 @@ router.get('/', async (req, res) =>  {
       return {
         id: game.id,
         player1,
-        player1Id: game.game_player1_id, 
+        player1Id: game.game_player1_id,
         player2,
-        player2Id: game.game_player2_id, 
+        player2Id: game.game_player2_id,
         tie: game.game_tie,
         winner,
         winnerId: game.game_winner_id,
+        game_fen: game.game_fen,
         duration,
         game_start_time: game.game_start_time.toLocaleString(),
       };
@@ -60,10 +61,10 @@ router.get('/', async (req, res) =>  {
 
     res.json(allGames);
 
-} catch (error) {
+  } catch (error) {
     console.error("Failed to get all games:", error);
     res.status(400).json({ error: "Failed to get all games" });
-}
+  }
 });
 
 

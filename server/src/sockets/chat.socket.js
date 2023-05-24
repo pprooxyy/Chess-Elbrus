@@ -24,7 +24,6 @@ function setupChatSocket(chatSocket) {
     socket.on("disconnect", () => {
       console.log("🔥: A user disconnected");
       users = users.filter((user) => user.socketID !== socket.id);
-      socket.broadcast.emit("newUserResponse", users);
       socket.disconnect();
     });
   });

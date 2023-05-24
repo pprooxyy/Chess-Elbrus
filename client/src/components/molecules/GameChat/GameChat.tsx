@@ -36,6 +36,8 @@ function GameChat({ socket }: any) {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
 
+      console.log(data.name)
+      console.log(userFromBack.user_name)
       if (data.name === userFromBack.user_name) data.name = "You";
 
       console.log(data);
