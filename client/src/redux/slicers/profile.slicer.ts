@@ -50,12 +50,14 @@ const profileSlicer = createSlice({
         state.profileOwner = action.payload.profileOwner;
         state.userGames = action.payload.userGames;
         state.userStats = action.payload.userStats;
+        state.userFriends = action.payload.userFriends;
         state.isLoading = false;
         state.error = null;
       })
       .addCase(getUserGames.rejected, (state, action) => {
         state.profileOwner = initialProfileOwner;
         state.userGames = [];
+        state.userFriends = [];
         state.userStats = initialUserStats;
         state.isLoading = false;
         state.error = action.error.message;
