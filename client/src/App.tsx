@@ -39,9 +39,9 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/game" element={<GamePage socket={socket} />} />
       </Routes>
-      {loadingAuth ? (
+      {loadingAuth ? ( 
         <h1>LOADING...</h1>
-      ) : (
+      ) : ( 
       <Routes>
         <Route path="/home" element={<MainPage />} />
         <Route path="/friends" element={<FriendPage />} />
@@ -49,7 +49,7 @@ function App() {
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/leaders" element={<LeaderboardPage />} />
       </Routes>
-        )}      
+       )}     
     </div>
   );
 }
