@@ -50,15 +50,14 @@ export interface ILoginState {
 //! l-OO-ser ?!
 export interface IGame {
   id: number;
-  game_player1_id: number;
-  game_player2_id: number;
-  game_status: boolean;
-  game_winner_id: number;
-  game_looser_id: number;
-  game_tie: boolean;
-  game_start_time: Date;
-  game_end_time: Date;
+  player1: string;
+  player2: string;
+  tie: boolean;
+  winner: string;
+  game_start_time: string;
+  duration: number;
 }
+
 //!
 
 export interface IGameStats {
@@ -69,10 +68,36 @@ export interface IGameStats {
   totalDuration: number;
 }
 
+export interface IUserFriend {
+  id: number;
+  user_name: string;
+  user_rating: number;
+  user_avatar: string;
+}
+
 export interface IProfileState {
   profileOwner: IUserRedux;
   userGames: IGame[];
+  userFriends: IUserFriend[];
   userStats: IGameStats;
   isLoading: boolean;
   error: string | null | undefined;
+}
+
+//? Leaders Slicer
+
+export interface ILeaderState {
+  games: IStatForLeaders[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface IStatForLeaders {
+  id: number;
+  user_name: string;
+  total: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  user_rating: number;
 }

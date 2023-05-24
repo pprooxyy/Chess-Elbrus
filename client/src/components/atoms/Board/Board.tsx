@@ -171,35 +171,6 @@ function Board({ socket }: any) {
     }
   };
 
-  // const handleMove = async ({ sourceSquare, targetSquare }: any) => {
-  //   try {
-  //     const response = await dispatch(getUser());
-  //     const userFromBack = response.payload;
-  //     const userFromBackID = userFromBack.user_id;
-  //     if (isPlayersMove) {
-  //       const currentMove = {
-  //         from: sourceSquare,
-  //         to: targetSquare,
-  //         promotion: "q",
-  //       };
-
-  //       socket.emit(
-  //         "move",
-  //         userFromBackID,
-  //         currentMove,
-  //         room,
-  //         position,
-  //         (resp: boolean) => {
-  //           resp ? console.log("move is made") : console.log("something wrong");
-  //         }
-  //       );
-  //     } else {
-  //       alert("not tour turn");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleLog = () => {
     console.log(room, position, isPlayersMove);

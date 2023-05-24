@@ -1,3 +1,4 @@
+
 const { Chess } = require("chess.js");
 
 class Game {
@@ -102,4 +103,4 @@ class Game {
   }
 }
 
-module.exports = Game;
+module.exports = Room;

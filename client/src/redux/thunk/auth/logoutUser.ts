@@ -13,11 +13,7 @@ export const logoutUser = createAsyncThunk(
         },
         credentials: "include",
       });
-      const result = await response.json();
-      
-        dispatch(logout()); // setAuthStatus is an action that updates isAuth in your Redux store
-      
-      return result;
+      dispatch(logout()); // setAuthStatus is an action that updates isAuth in your Redux store
     } catch (error) {
       console.log(error);
     }

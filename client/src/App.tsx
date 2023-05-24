@@ -22,7 +22,7 @@ function App() {
   //todo который лежит в сессии и кладёт его в стейт
   useEffect(() => {
     dispatch(getUser());
-  }, []);
+  }, [dispatch]);
 
   const loadingAuth = useSelector(
     (state: RootState) => state.authSlicer.isLoading
@@ -30,27 +30,26 @@ function App() {
   // const loadingProfile = useSelector(
   //   (state: RootState) => state.profileSlicer.isLoading
   // );
-  console.log("loadingAuth", loadingAuth);
+  // console.log("loadingAuth", loadingAuth);
   // console.log("loadingProfile", loadingProfile);
 
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<StartPage />} />
+        <Route path="/game" element={<GamePage socket={socket} />} />
       </Routes>
-      {/* {loadingAuth ? ( <---- это говно не работает хуйня переделывай
+      {loadingAuth ? ( 
         <h1>LOADING...</h1>
-      ) : ( */}
-      {(
-        <Routes>
-          <Route path="/home" element={<MainPage />} />
-          <Route path="/friends" element={<FriendPage />} />
-          <Route path="/profile/:id" element={<ProfilePage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/leaders" element={<LeaderboardPage />} />
-          <Route path="/game" element={<GamePage socket={socket} />} />
-        </Routes>
-      )}
+      ) : ( 
+      <Routes>
+        <Route path="/home" element={<MainPage />} />
+        <Route path="/friends" element={<FriendPage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/leaders" element={<LeaderboardPage />} />
+      </Routes>
+       )}     
     </div>
   );
 }

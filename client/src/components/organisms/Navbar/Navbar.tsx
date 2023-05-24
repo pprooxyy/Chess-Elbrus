@@ -1,33 +1,26 @@
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
+import { logoutUser } from "../../../redux/thunk/auth/logoutUser";
 
-import { logout } from "../../../redux/slicers/auth.slicer";
+
 
 
 
 export default function Navbar() {
-  //todo достаёт юзера из стейта
   const user = useSelector((state: RootState) => state.authSlicer.user);
-  // const user: any = localStorage.getItem("user");
-  // const parsedUser = JSON.parse(user);
-  // console.log(parsedUser, "userId in NAV");
-  // console.log("user from Navbar: ", user);
   const dispatch = useAppDispatch();
   const navigate= useNavigate();
-
   const logoutHandler = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) =>{
       e.preventDefault();
-      dispatch(logout())
-      navigate('/')
+      dispatch(logoutUser())
+      navigate('/') 
     }
-
-  
-
   return (
     <div className="nav">
       <ul>
@@ -91,7 +84,9 @@ export default function Navbar() {
             History
           </li>
         </Link>
+
           <li className="nav-item log-out" onClick={logoutHandler}>
+
             <img
               className="navbar-icon"
               src="/assets/navbar-icons/pawn.png"

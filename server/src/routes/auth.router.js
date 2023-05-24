@@ -88,8 +88,8 @@ router.post("/login", async (req, res) => {
 
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
-    res.clearCookie("Cookie-Chess");
-    res.json({ user: "", isAuthenticated: false});
+    res.clearCookie("cookie");
+    res.end()
   });
 });
 
