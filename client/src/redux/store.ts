@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlicer from "./slicers/auth.slicer";
 import profileSlicer from "./slicers/profile.slicer";
+import leaderSlice from "./slicers/leaders.slicer";
 
 export const store = configureStore({
-  reducer: { authSlicer, profileSlicer },
+  reducer: { authSlicer, profileSlicer, leaderSlice },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

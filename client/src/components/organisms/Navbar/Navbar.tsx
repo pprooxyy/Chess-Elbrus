@@ -1,21 +1,26 @@
-import React, { useEffect } from "react";
+import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
+import { logoutUser } from "../../../redux/thunk/auth/logoutUser";
+
+
+
+
 
 export default function Navbar() {
+  const user = useSelector((state: RootState) => state.authSlicer.user);
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.authSlicer.user);
-  useEffect(() => {
-    // Dispatch the getUser thunk only if the user data is empty
-    if (!user.id) {
-      dispatch(getUser());
+  const navigate= useNavigate();
+  const logoutHandler = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) =>{
+      e.preventDefault();
+      dispatch(logoutUser())
+      navigate('/') 
     }
-  }, [dispatch, user.id]);
-
   return (
     <div className="nav">
       <ul>
@@ -39,7 +44,7 @@ export default function Navbar() {
             Play
           </li>
         </Link>
-        <Link to={`/profile/${user.id}`}>
+        <Link to={`/profile/${user?.id}`}>
           <li className="nav-item">
             <img
               className="navbar-icon"
@@ -48,7 +53,7 @@ export default function Navbar() {
             />
             Profile
           </li>
-        </Link>
+        </Link> 
         <Link to="/leaders">
           <li className="nav-item">
             <img
@@ -79,8 +84,9 @@ export default function Navbar() {
             History
           </li>
         </Link>
-        <Link to="/logout">
-          <li className="nav-item log-out">
+
+          <li className="nav-item log-out" onClick={logoutHandler}>
+
             <img
               className="navbar-icon"
               src="/assets/navbar-icons/pawn.png"
@@ -88,7 +94,7 @@ export default function Navbar() {
             />
             Logout
           </li>
-        </Link>
+        
       </ul>
     </div>
   );
