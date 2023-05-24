@@ -153,7 +153,7 @@ function Board({ socket }: any) {
                 : console.log("something wrong");
             }
           );
-          setIsPlayersMove(true);
+          setIsPlayersMove(false);
         }
       } catch (error) {
         console.log(error);

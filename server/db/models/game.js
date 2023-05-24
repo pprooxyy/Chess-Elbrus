@@ -29,8 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       game_tie: DataTypes.BOOLEAN,
       game_start_time: DataTypes.DATE,
       game_end_time: DataTypes.DATE,
+      game_fen: DataTypes.STRING,
     },
     {
+      
       sequelize,
       modelName: "Game",
     }

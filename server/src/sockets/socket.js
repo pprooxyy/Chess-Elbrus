@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const { Chess } = require("chess.js");
 const Game = require("../lib/Room.class");
 
-module.exports = (io, rooms) => {
+module.exports = (io, rooms = new Map([["", new Game()]])) => {
   io.on("connection", (socket) => {
     socket.on("reconnect", (userData, callback) => {
       if (!userData) return;
@@ -13,7 +13,7 @@ module.exports = (io, rooms) => {
       if (roomArray) {
         const room = roomArray[1];
         const player = room.getPlayerById(userData.id);
-
+        
         const roomObject = {
           roomId: room.roomId,
           playerColor: player.color,
@@ -124,7 +124,7 @@ function isPlayersTurn(player, room) {
   return player && player.isPlayerTurn && room && !room.isCheckMate();
 }
 
-function findRoomByPlayerId(playerId, rooms) {
+function findRoomByPlayerId(playerId, rooms = new Map([["", new Game()]])) {
   console.log("ROOOOOMS", rooms);
   for (const room of rooms) {
     const player1 = room[1].player1;
