@@ -22,7 +22,7 @@ function App() {
   //todo который лежит в сессии и кладёт его в стейт
   useEffect(() => {
     dispatch(getUser());
-  }, []);
+  }, [dispatch]);
 
   const loadingAuth = useSelector(
     (state: RootState) => state.authSlicer.isLoading
@@ -30,7 +30,7 @@ function App() {
   // const loadingProfile = useSelector(
   //   (state: RootState) => state.profileSlicer.isLoading
   // );
-  console.log("loadingAuth", loadingAuth);
+  // console.log("loadingAuth", loadingAuth);
   // console.log("loadingProfile", loadingProfile);
 
   return (

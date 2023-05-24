@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chessboard from "chessboardjsx";
 import { Chess } from "chess.js";
-import { useAppDispatch } from "../../../redux/typesRedux";
+import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 function Board({ socket }: any) {
@@ -14,26 +14,34 @@ function Board({ socket }: any) {
   const [playerColor, setPlayerColor]: any = useState("white");
 
   const dispatch = useAppDispatch();
+  const user: any = useAppSelector((state) => state.authSlicer.user);
 
   useEffect(() => {
-    console.log("MOOVE", isPlayersMove);
+    // Dispatch the getUser thunk only if the user data is empty
+    if (!user.id) {
+      dispatch(getUser());
+    }
+  }, [user]);
+
+  useEffect(() => {
     console.log(chess);
-
     socket.on("connect", async () => {
-      const storageUserId = localStorage.getItem("userId");
+      const userId = user.id;
       const storageRoomId = localStorage.getItem("roomId");
+      console.log("storageRoomId", storageRoomId);
 
-      if (storageUserId && storageRoomId) {
+      if (userId && storageRoomId) {
         console.log("LALA");
 
         socket.emit(
           "reconnect",
-          { storageUserId, storageRoomId },
+          { userId, storageRoomId },
           (onSuccess: any) => {
             console.log("lala");
 
             console.log("SUCCES", onSuccess);
             console.log(onSuccess.storageRoomId);
+            console.log(onSuccess.userId);
 
             // setRoom(onSuccess[1]);
             // chess.load(onSuccess.fen);
@@ -45,19 +53,41 @@ function Board({ socket }: any) {
           }
         );
       }
+
+      socket.on("reconnect", (roomObject: any) => {
+        console.log("roomObject", roomObject);
+
+        // const room = roomObject[Object.keys(roomObject)[0]];
+        const currecntRoom = localStorage.getItem("room");
+        console.log(room);
+
+        setRoom(currecntRoom);
+        setChess(room.game);
+        setPlayerColor(
+          room.getPlayerById(user.id).color === "w" ? "white" : "black"
+        );
+        setPosition(room.game.fen());
+        setIsPlayersMove(room.getPlayerById(user.id).isCurrentPlayer());
+      });
     });
 
-    socket.on("reconnect", (roomObject: any) => {
-      const storageRoomId: any = localStorage.getItem("roomId");
-      console.log(roomObject);
-      console.log(storageRoomId);
+    // socket.on("reconnect", (roomObject: any) => {
+    //   const storageRoomId: any = localStorage.getItem("roomId");
+    //   console.log(roomObject);
+    //   console.log(storageRoomId);
 
-      setChess(roomObject[storageRoomId]);
-      console.log("CHESS AFTER SETCHES", chess);
+    //   setChess(roomObject[storageRoomId]);
+    //   console.log("CHESS AFTER SETCHES", chess);
 
-      // setPosition(chess.fen());
-      console.log("ROOM OBJECT", roomObject);
-    });
+    //   // setPosition(chess.fen());
+    //   console.log("ROOM OBJECT", roomObject);
+    // });
+
+    //TODO reconnect logic
+    //TODO fix chat bug
+    //TODO main page styles //!done
+    //TODO chess on mate
+    //TODO mooves history
 
     socket.on("move", (nextPosition: any, move: any) => {
       console.log("meme");
@@ -78,34 +108,29 @@ function Board({ socket }: any) {
       }
     });
 
-    // return () => {
-    //   socket.off("room-updated");
-    //   socket.off("move");
-    // };
-  }, [chess, isPlayersMove, position, socket]);
+    return () => {
+      socket.off("reconnect");
+      socket.off("move");
+    };
+  }, [user, isPlayersMove, chess, socket, room]);
 
   const handleCreateRoom = async () => {
     try {
-      const response = await dispatch(getUser());
-      const userFromBack = response.payload;
-      const userId = response.payload.user_id;
-      const userName = response.payload.user_name;
+      const userFromBack = user;
+      // const userName = user.user_name;
+      // const userId = user.id;
 
       socket.emit(
         "create-room",
         userFromBack,
-        (currentRoomID: any, firstMoveCheck: any) => {
+        (currentRoomID: any, firstMoveCheck: any, room: any) => {
           console.log(currentRoomID);
           firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
 
-          localStorage.setItem("roomId", currentRoomID);
-          localStorage.setItem("userId", userId);
-          localStorage.setItem("userName", userName);
-
           setRoom(currentRoomID);
           setIsPlayersMove(firstMoveCheck);
-          // const isFirstMove = createdRoom.player1.color === "w";
-          // setIsPlayersMove(isFirstMove);
+          localStorage.setItem("roomId", currentRoomID);
+          localStorage.setItem("room", room);
         }
       );
     } catch (error) {
@@ -115,19 +140,15 @@ function Board({ socket }: any) {
 
   const handleJoinRoom = async () => {
     try {
-      const response = await dispatch(getUser());
-      const userFromBack = response.payload;
-      const userName = response.payload.user_name;
-      const userId = response.payload.user_id;
+      const userFromBack = user;
+      // const userName = user.user_name;
+      // const userId: any = user.id;
       const roomId: any = prompt("Enter room ID:");
-      localStorage.setItem("roomId", roomId);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("userName", userName);
       socket.emit(
         "join-room",
         roomId,
         userFromBack,
-        (success: boolean, firstMoveCheck: boolean) => {
+        (success: boolean, firstMoveCheck: boolean, room: any) => {
           if (success) {
             setRoom(roomId);
             setIsPlayersMove(firstMoveCheck);
@@ -150,9 +171,9 @@ function Board({ socket }: any) {
     console.log("POSSIBLE MOVES", chess.moves());
 
     try {
-      const response = await dispatch(getUser());
-      const userFromBack = response.payload;
-      const userFromBackID = userFromBack.user_id;
+      const userFromBack = user;
+      // const userName = user.user_name;
+      // const userId: any = user.id;
       if (isPlayersMove) {
         const currentMove = {
           from: sourceSquare,
@@ -166,7 +187,7 @@ function Board({ socket }: any) {
 
           socket.emit(
             "move",
-            userFromBackID,
+            userFromBack,
             currentMove,
             room,
             position,

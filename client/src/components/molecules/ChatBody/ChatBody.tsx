@@ -1,27 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 interface ChatBodyProps {
   messages: any[]; // Specify the correct type for messages array
 }
 
 function ChatBody({ messages }: ChatBodyProps) {
-  // const navigate = useNavigate();
-
-  // const handleLeaveChat = () => {
-  //   localStorage.removeItem("userName");
-  //   navigate("/");
-  //   window.location.reload();
-  // };
   return (
     <>
-      {/* <header className="chat__mainHeader">
-        <p>Hangout with Colleagues</p>
-        <button className="leaveChat__btn" onClick={handleLeaveChat}>
-          LEAVE CHAT
-        </button>
-      </header> */}
-
       <div className="message__container">
         {messages.map((message) =>
           message.name === localStorage.getItem("userName") ? (

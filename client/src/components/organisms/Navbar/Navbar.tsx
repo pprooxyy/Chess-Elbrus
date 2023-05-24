@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -7,12 +7,14 @@ import { useAppDispatch, useAppSelector } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 export default function Navbar() {
-  //todo достаёт юзера из стейта
-  const user = useSelector((state: RootState) => state.authSlicer.user);
-  // const user: any = localStorage.getItem("user");
-  // const parsedUser = JSON.parse(user);
-  // console.log(parsedUser, "userId in NAV");
-  // console.log("user from Navbar: ", user);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authSlicer.user);
+  useEffect(() => {
+    // Dispatch the getUser thunk only if the user data is empty
+    if (!user.id) {
+      dispatch(getUser());
+    }
+  }, [dispatch, user.id]);
 
   return (
     <div className="nav">
@@ -77,7 +79,6 @@ export default function Navbar() {
             History
           </li>
         </Link>
-
         <Link to="/logout">
           <li className="nav-item log-out">
             <img

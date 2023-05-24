@@ -1,6 +1,5 @@
-class Game {
-  constructor(roomId, game, player1, player2) {
-    this.roomId = roomId;
+class Room {
+  constructor(game, player1, player2) {
     this.player1 = player1;
     this.player2 = player2;
     this.game = game;
@@ -85,4 +84,4 @@ class Game {
   }
 }
 
-module.exports = Game;
+module.exports = Room;
