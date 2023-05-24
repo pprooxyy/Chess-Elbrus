@@ -37,20 +37,19 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<StartPage />} />
+        <Route path="/game" element={<GamePage socket={socket} />} />
       </Routes>
       {loadingAuth ? (
         <h1>LOADING...</h1>
       ) : (
-        <Routes>
-          
-          <Route path="/home" element={<MainPage />} />
-          <Route path="/friends" element={<FriendPage />} />
-          <Route path="/profile/:id" element={<ProfilePage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/leaders" element={<LeaderboardPage />} />
-          <Route path="/game" element={<GamePage socket={socket} />} />
-        </Routes>
-      )}
+      <Routes>
+        <Route path="/home" element={<MainPage />} />
+        <Route path="/friends" element={<FriendPage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/leaders" element={<LeaderboardPage />} />
+      </Routes>
+        )}      
     </div>
   );
 }

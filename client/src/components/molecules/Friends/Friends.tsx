@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import "./Friends.css";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 
 interface Friend {
   id: number;
   name: string;
   avatar: string;
+  rating: number
 }
 
 const Friends: React.FC = () => {
@@ -148,32 +150,45 @@ const Friends: React.FC = () => {
       </div>
       {errorMsg && <p className="error-message">{errorMsg}</p>}
       {friends.length === 0 ? (
-        <p className='no-friend-list'>No friends found</p>
+        <>
+          <p className='no-friend-list'>Friends no added</p>
+          <div className="line-up"></div>
+        </>
+
       ) : (
         <div className="friend-cards">
           {friends.map((friend) => (
-            <Card key={friend.id} className="friend-card">
-              <a href={`/profile/${friend.id}`} className="friend-name"><Card.Img variant="top" src={friend.avatar} alt={friend.name} className='avatar' /></a>
-              <Card.Body>
-                <a href={`/profile/${friend.id}`} className="friend-name"><Card.Title>{friend.name}</Card.Title></a>
-                <Button variant="danger" onClick={() => deleteFriend(friend.id)} className="custom-button">DELETE</Button>
-              </Card.Body>
-            </Card>
+            <div className="inside-card">
+              <Card key={friend.id} className="friend-card">
+                <div className="avatar-name">
+                  <Link to={`/profile/${friend.id}`} className="friend-name"><Card.Img variant="top" src={friend.avatar} alt={friend.name} className='avatar' /></Link>
+                  <Card.Body>
+                    <Link to={`/profile/${friend.id}`} className="friend-name"><Card.Title>{friend.name}<br />{friend.rating}</Card.Title></Link>
+                  </Card.Body>
+                </div>
+                <Button variant="danger" onClick={() => deleteFriend(friend.id)} className="custom-button1">DELETE</Button>
+              </Card>
+            </div>
           ))}
         </div>
-      )}
-      {<div className="friend-cards">
-        {users.map((user) => (
-          <Card key={user.id} className="friend-card">
-            <a href={`/profile/${user.id}`} className="friend-name"><Card.Img variant="top" src={user.avatar} alt={user.name} className='avatar' /></a>
-            <Card.Body>
-              <a href={`/profile/${user.id}`} className="friend-name"><Card.Title>{user.name}</Card.Title></a>
-              <Button variant="danger" onClick={() => addFriend(user.id)} className="custom-button">ADD</Button>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>}
-    </div>
+      )
+      }
+      {
+        <div className="friend-cards">
+          {users.map((user) => (
+            <div className="inside-card">
+              <Card key={user.id} className="friend-card">
+                <Link to={`/profile/${user.id}`} className="friend-name"><Card.Img variant="top" src={user.avatar} alt={user.name} className='avatar' /></Link>
+                <Card.Body>
+                  <Link to={`/profile/${user.id}`} className="friend-name"><Card.Title>{user.name}<br />{user.rating}</Card.Title></Link>
+                </Card.Body>
+                <Button variant="danger" onClick={() => addFriend(user.id)} className="custom-button2">ADD</Button>
+              </Card>
+            </div>
+          ))}
+        </div>
+      }
+    </div >
   );
 };
 
