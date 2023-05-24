@@ -1,4 +1,3 @@
-
 const { Chess } = require("chess.js");
 
 class Game {
@@ -19,11 +18,13 @@ class Game {
   }
 
   isGameEnd() {
-    return this.game.isGameOver() || this.game.isCheckmate() || this.game.isDraw()
+    return (
+      this.game.isGameOver() || this.game.isCheckmate() || this.game.isDraw()
+    );
   }
 
   isPlayerTurn(player) {
-    return player && this.isGameEnd() && player.color === this.game.turn()
+    return player && this.isGameEnd() && player.color === this.game.turn();
   }
 
   setTurns() {
@@ -40,11 +41,9 @@ class Game {
       isBot,
       isHost,
       isPlayerTurn: null,
-    }
+    };
 
-    wichPlayer === 1
-      ? (this.player1 = player)
-      : (this.player2 = player);
+    wichPlayer === 1 ? (this.player1 = player) : (this.player2 = player);
   }
 
   log() {
@@ -90,7 +89,7 @@ class Game {
         this.player1 = null;
       }
     } else if (this.player2 && this.player2.id === id) {
-      this.player2 = null
+      this.player2 = null;
     }
   }
 
@@ -103,4 +102,4 @@ class Game {
   }
 }
 
-module.exports = Room;
+module.exports = Game;

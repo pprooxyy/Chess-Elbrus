@@ -8,10 +8,7 @@ module.exports = (io, rooms) => {
       if (!previousData) return;
 
       console.log("LOG_DATA_FOR_RECONNECT", previousData);
-      const roomArray = findRoomByPlayerId(
-        previousData.id,
-        rooms
-      );
+      const roomArray = findRoomByPlayerId(previousData.id, rooms);
       console.log("room array", roomArray);
       if (roomArray) {
         const room = roomArray[1];
@@ -21,7 +18,7 @@ module.exports = (io, rooms) => {
           roomId: room.roomId,
           playerColor: player.color,
           playerCanMove: room.isFull() && room.game.turn() === player.color,
-          board: room.game.fen()
+          board: room.game.fen(),
         };
         console.log("LOG ROOM OBJECT", roomObject);
         socket.join(roomArray[0]);
@@ -33,11 +30,11 @@ module.exports = (io, rooms) => {
     });
 
     socket.on("create-room", (user, callback) => {
-      if (!user) return
-      const oldRoomArr = findRoomByPlayerId(user.id, rooms)
+      if (!user) return;
+      const oldRoomArr = findRoomByPlayerId(user.id, rooms);
       if (oldRoomArr) {
         const oldRoom = rooms.get(oldRoomArr[0]);
-        oldRoom.removePlayerById(user.id)
+        oldRoom.removePlayerById(user.id);
         if (oldRoom.isEmpty()) {
           rooms.delete(oldRoom[0]);
         }
@@ -71,13 +68,13 @@ module.exports = (io, rooms) => {
       if (!room) return callback(false);
       if (room.isFull()) return callback(false);
 
-      const oldRoomArr = findRoomByPlayerId(user.id, rooms)
+      const oldRoomArr = findRoomByPlayerId(user.id, rooms);
 
       if (oldRoomArr) {
-        if (oldRoomArr[0] === roomId) callback(false)
+        if (oldRoomArr[0] === roomId) callback(false);
 
         const oldRoom = rooms.get(oldRoomArr[0]);
-        oldRoom.removePlayerById(user.id)
+        oldRoom.removePlayerById(user.id);
         if (oldRoom.isEmpty()) {
           rooms.delete(oldRoom[0]);
         }
@@ -104,25 +101,22 @@ module.exports = (io, rooms) => {
       }
     });
 
-    socket.on(
-      "move",
-      (userId, roomId, move, position, callback) => {
-        const room = rooms.get(roomId);
-        if (!room) return callback(false);
-        const player = room.getPlayerById(userId);
-        if (!player) return callback(false);
+    socket.on("move", (userId, roomId, move, position, callback) => {
+      const room = rooms.get(roomId);
+      if (!room) return callback(false);
+      const player = room.getPlayerById(userId);
+      if (!player) return callback(false);
 
-        console.log("ROOM", room);
-        console.log("PLAYER", player);
-        console.log("POSITION CAME TO SERVER", room.game.ascii());
+      console.log("ROOM", room);
+      console.log("PLAYER", player);
+      console.log("POSITION CAME TO SERVER", room.game.ascii());
 
-        socket.join(roomId);
-        const nextPosition = room.makeMove(position, move);
+      socket.join(roomId);
+      const nextPosition = room.makeMove(position, move);
 
-        callback(true);
-        io.to(roomId).emit("move", nextPosition, move);
-      }
-    );
+      callback(true);
+      io.to(roomId).emit("move", nextPosition, move);
+    });
   });
 };
 

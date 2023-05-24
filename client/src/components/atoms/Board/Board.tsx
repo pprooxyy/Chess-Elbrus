@@ -5,18 +5,17 @@ import { useAppDispatch } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
 
 function Board({ socket }: any) {
-  
   const [chess, setChess] = useState(new Chess());
   const [room, setRoom] = useState("");
   const [position, setPosition] = useState(
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   );
-  
+
   const [isPlayersMove, setIsPlayersMove] = useState(true);
-  const [playerColor, setPlayerColor] = useState<'white' | 'black'>("white");
+  const [playerColor, setPlayerColor] = useState<"white" | "black">("white");
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -50,15 +49,15 @@ function Board({ socket }: any) {
         chess.ascii()
       );
       console.log("NEXT POSITION CAME TO CLENT 2", nextPosition);
-      // if(isPlayersMove){ 
-        if (nextPosition !== "invalid move") {
-          chess.load(nextPosition);
-          console.log("POSITION AFTER LOAD CLIENT 2", chess.ascii());
-          setPosition(nextPosition);
-          setIsPlayersMove(!isPlayersMove);
-        } else {
-          console.log("invalid move");
-        }
+      // if(isPlayersMove){
+      if (nextPosition !== "invalid move") {
+        chess.load(nextPosition);
+        console.log("POSITION AFTER LOAD CLIENT 2", chess.ascii());
+        setPosition(nextPosition);
+        setIsPlayersMove(!isPlayersMove);
+      } else {
+        console.log("invalid move");
+      }
       // }
     });
 
@@ -79,7 +78,7 @@ function Board({ socket }: any) {
           console.log(currentRoomID);
           firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
 
-          chess.reset()
+          chess.reset();
           setPosition(chess.fen());
           setRoom(currentRoomID);
           setIsPlayersMove(firstMoveCheck);
@@ -139,7 +138,7 @@ function Board({ socket }: any) {
           setPosition(chess.fen());
           console.log("AFTER MOVE FOR USER THAT MOVED", chess.ascii());
           console.log("POSSIBLE MOVES", chess.moves());
-  
+
           socket.emit(
             "move",
             userFromBackID,
@@ -152,14 +151,13 @@ function Board({ socket }: any) {
                 : console.log("something wrong");
             }
           );
-          setIsPlayersMove(true)
+          setIsPlayersMove(true);
         }
       } catch (error) {
         console.log(error);
       }
     }
   };
-
 
   const handlePieceClick = (square: Square) => {
     const piece = chess.get(square);
@@ -170,7 +168,6 @@ function Board({ socket }: any) {
       setHighlightedSquares(highlightedSquares);
     }
   };
-
 
   const handleLog = () => {
     console.log(room, position, isPlayersMove);
@@ -191,7 +188,10 @@ function Board({ socket }: any) {
             [selectedSquare]: { backgroundColor: "orange" },
           }),
           ...highlightedSquares.reduce(
-            (obj, square) => ({ ...obj, [square]: { backgroundColor: "yellow" } }),
+            (obj, square) => ({
+              ...obj,
+              [square]: { backgroundColor: "yellow" },
+            }),
             {}
           ),
         }}
