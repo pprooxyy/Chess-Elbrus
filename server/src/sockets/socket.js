@@ -1,36 +1,35 @@
 const { v4: uuidv4 } = require("uuid");
 const { Chess } = require("chess.js");
-const Game = require("../lib/Room.class");
+const Room = require("../lib/Room.class");
 
-module.exports = (io, rooms) => {
+module.exports = (io, redis) => {
+  redis.connect((err) => {
+    if (err) {
+      console.log("Failed to connect to Redis", err);
+      return;
+    }
+    console.log("Connected to Redis");
+  });
+
   io.on("connect", (socket) => {
-    socket.on("reconnect", (previousData, callback) => {
-      console.log("LOG_DATA_FOR_RECONNECT", previousData);
-      const roomArray = findRoomByPlayerId(
-        previousData.storageUserId,
-        Array.from(rooms)
-      );
-      console.log("room array", roomArray);
-      if (roomArray) {
-        const roomObject = { [roomArray[0]]: roomArray[1] };
-        console.log("LOG ROOM OBJECT", roomObject);
-        callback(roomObject);
-        socket.join(roomArray[0]);
-        socket.emit("reconnect", roomObject);
-        // if (roomObject) {
-        //   socket.emit("move", roomObject.game.fen());
-        // }
-      }
-    });
+    // socket.on("reconnect", (previousData, callback) => {
+    // console.log("LOG_DATA_FOR_RECONNECT", previousData);
+    // console.log(redis);
+    // redis.get(previousData.roomId, (err, result) => {
+    //   if (err) throw err;
+    //   const room = JSON.parse(result);
+    //   console.log(room);
+    // });
+    // });
 
     socket.on("create-room", (user, callback) => {
       const game = new Chess();
       const roomId = uuidv4();
-      const room = new Game(roomId, game, null, null);
+      const room = new Room(game, null, null);
       const randomColor = room.randomColor();
 
       const playerParams = [
-        user.user_id,
+        user.id,
         user.user_name,
         user.user_rating,
         randomColor,
@@ -39,47 +38,45 @@ module.exports = (io, rooms) => {
         1,
       ];
       room.setPlayer(...playerParams);
-      rooms.set(roomId, room);
+      redis.set(roomId, JSON.stringify(room));
       socket.join(roomId);
-      // socket.emit("move", room.game.fen());
       const firstMoveCheck = randomColor === "w" ? true : false;
-      callback(roomId, firstMoveCheck);
+      callback(roomId, firstMoveCheck, room);
     });
 
     socket.on("join-room", (roomId, user, callback) => {
-      const room = rooms.get(roomId);
-      const setSecondPlayerColor = room.setSecondPlayerColor();
+      redis.get(roomId, (err, result) => {
+        if (err) throw err;
+        const room = JSON.parse(result);
+        console.log("ROOM WHEN JOIN", room);
+        if (!room) return callback(false);
+        if (room.isFull()) return callback(false);
 
-      if (!room) return callback(false);
-      if (room.isFull()) return callback(false);
+        if (room.player2 === null) {
+          const playerParams = [
+            user.id,
+            user.user_name,
+            user.user_rating,
+            room.setSecondPlayerColor(),
+            false,
+            false,
+            2,
+          ];
 
-      if (room.player2 === null) {
-        const playerParams = [
-          user.user_id,
-          user.user_name,
-          user.user_rating,
-          setSecondPlayerColor,
-          false,
-          false,
-          2,
-        ];
-
-        const firstMoveCheck = setSecondPlayerColor === "w" ? true : false;
-        room.setPlayer(...playerParams);
-        socket.join(roomId);
-        // socket.emit("move", room.game.fen());
-        callback(true, firstMoveCheck);
-      }
+          const firstMoveCheck = room.player2.color === "w" ? true : false;
+          room.setPlayer(...playerParams);
+          redis.set(roomId, JSON.stringify(room));
+          socket.join(roomId);
+          callback(true, firstMoveCheck, room);
+        }
+      });
     });
 
-    socket.on(
-      "move",
-      (user, move, roomId, position, currentMoove, callback) => {
-        const room = rooms.get(roomId);
-        const player = room.getPlayerById(user.user_id);
-        console.log("ROOM", room);
-        console.log("PLAYER", player);
-        console.log("POSITION CAME TO SERVER", room.game.ascii());
+    socket.on("move", (user, move, roomId, position, currentMove, callback) => {
+      redis.get(roomId, (err, result) => {
+        if (err) throw err;
+        const room = JSON.parse(result);
+        const player = room.getPlayerById(user.id);
 
         if (!player || !room) {
           callback(false);
@@ -88,18 +85,16 @@ module.exports = (io, rooms) => {
         socket.join(roomId);
         const nextPosition = room.makeMove(position, move);
 
+        redis.set(roomId, JSON.stringify(room));
         callback(true);
         io.to(roomId).emit("move", nextPosition, move);
-      }
-    );
+      });
+    });
   });
 };
 
-function isPlayersTurn(player, room) {
-  return player && player.isPlayerTurn && room && !room.isCheckMate();
-}
-
 function findRoomByPlayerId(playerId, rooms) {
+  console.log("ROOOOOOOOMS", rooms);
   for (const room of rooms) {
     console.log("ROOOOOMS", rooms);
     const player1 = room[1].player1;
