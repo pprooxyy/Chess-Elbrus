@@ -8,6 +8,10 @@ class Game {
     this.game = game;
   }
 
+  startGame() {
+    this.startTime = new Date();
+  }
+
   randomColor() {
     const random = Math.random();
     return random > 0.5 ? "w" : "b";
@@ -51,24 +55,57 @@ class Game {
     console.log(this.game.moves());
   }
 
-  makeMove(currentPosition, nextMove) {
+  makeMove(nextMove) {
     console.log("FIRST BOARD POSITION ON SERVER", this.game.ascii());
     console.log("POSSIBLE MOVES", this.game.moves());
-    console.log(currentPosition);
     console.log(this.game.fen());
-    if (currentPosition === this.game.fen()) {
-      // this.game.load(currentPosition);
-      this.game.move(nextMove);
-      console.log("FEN OF GAME AFTER MOVE", this.game.fen());
-      console.log("POSITION AFTER MOVE", this.game.ascii());
-      console.log("POSSIBLE MOVES", this.game.moves());
-      console.log("NEXT MOVE", nextMove);
-      return this.game.fen();
+    try {
+      if (this.game.move(nextMove)) {
+        console.log("FEN OF GAME AFTER MOVE", this.game.fen());
+        console.log("POSITION AFTER MOVE", this.game.ascii());
+        console.log("POSSIBLE MOVES", this.game.moves());
+        console.log("NEXT MOVE", nextMove);
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
     }
+    return false
+  }
+
+  getWinner() {
+    return this.game.turn() === this.player1.color ?
+      this.player2.id :
+      this.player1.id
+  }
+
+  getLoser() {
+    return this.game.turn() === this.player1.color ?
+      this.player1.id :
+      this.player2.id
+  }
+
+  getDbData() {
+    const data = {
+      game_player1_id: this.player1.id,
+      game_player2_id: this.player2.id,
+      game_winner_id: this.getWinner(),
+      game_looser_id: this.getLoser(),
+      game_tie: this.game.isDraw(),
+      game_start_time: this.startTime,
+      game_end_time: new Date(),
+      game_fen: this.game.fen(),
+    }
+
+    return data;
+  }
+
+  getNextPlayerById(player) {
+    return player === this.player1.id ? this.player2 : this.player1;
   }
 
   getNextPlayer(player) {
-    return player.id === this.player1.id ? this.player2 : this.player1;
+    return this.getNextPlayerById(player.id);
   }
 
   isFull() {

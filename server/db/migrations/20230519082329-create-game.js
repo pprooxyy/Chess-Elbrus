@@ -57,6 +57,9 @@ module.exports = {
       game_end_time: {
         type: Sequelize.DATE,
       },
+      game_fen: { 
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
