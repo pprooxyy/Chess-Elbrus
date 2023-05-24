@@ -1,11 +1,12 @@
 import React from "react";
+import "./ChatBody.css";
 interface ChatBodyProps {
   messages: any[]; // Specify the correct type for messages array
 }
 
 function ChatBody({ messages }: ChatBodyProps) {
   return (
-    <>
+    <div className="chat-body">
       <div className="message__container">
         {messages.map((message) => {
           if (message.notification) {
@@ -15,7 +16,7 @@ function ChatBody({ messages }: ChatBodyProps) {
                   <p>{message.text}</p>
                 </div>
               </div>
-            )
+            );
           } else if (message.name === "You") {
             return (
               <div className="message__chats">
@@ -24,7 +25,7 @@ function ChatBody({ messages }: ChatBodyProps) {
                   <p>{message.text}</p>
                 </div>
               </div>
-            )
+            );
           } else {
             return (
               <div className="message__chats">
@@ -33,7 +34,7 @@ function ChatBody({ messages }: ChatBodyProps) {
                   <p>{message.text}</p>
                 </div>
               </div>
-            )
+            );
           }
         })}
 
@@ -42,7 +43,7 @@ function ChatBody({ messages }: ChatBodyProps) {
         </div>
         <div ref={lastMessageRef} /> */}
       </div>
-    </>
+    </div>
   );
 }
 

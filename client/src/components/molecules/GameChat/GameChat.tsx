@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-
+import "./GameChat.css";
 // import ChatBar from "../ChatBar/ChatBar";
 import ChatBody from "../ChatBody/ChatBody";
 import ChatFooter from "../ChatFooter/ChatFooter";
@@ -9,7 +9,6 @@ import { getUser } from "../../../redux/thunk/auth/getUser";
 
 function GameChat({ socket }: any) {
   const [messages, setMessages] = useState<any>([]);
-
 
   const dispatch = useAppDispatch();
 
@@ -22,13 +21,15 @@ function GameChat({ socket }: any) {
         name: userFromBack.user_name,
         id: `${userFromBack.id}`,
         socketID: socket.id,
-      })
+      });
 
-      setMessages([...messages, {
-        notification: true,
-        text: "you connected to chat",
-      }]);
-
+      setMessages([
+        ...messages,
+        {
+          notification: true,
+          text: "you connected to chat",
+        },
+      ]);
     });
 
     socket.on("messageResponse", async (data: any) => {
@@ -38,16 +39,21 @@ function GameChat({ socket }: any) {
       if (data.name === userFromBack.user_name) data.name = "You";
 
       console.log(data);
-      setMessages((value: any) => [...value, data])
+      setMessages((value: any) => [...value, data]);
     });
   }, []);
 
   return (
     <div className="chat">
+      <h2>Chat:</h2>
       {/* <ChatBar socket={socket} /> */}
       <div className="chat__main">
         <ChatBody messages={messages} />
-        <ChatFooter socket={socket} messages={messages} setMessages={setMessages} />
+        <ChatFooter
+          socket={socket}
+          messages={messages}
+          setMessages={setMessages}
+        />
       </div>
     </div>
   );

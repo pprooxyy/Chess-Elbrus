@@ -47,7 +47,7 @@ export default function MainProfilePage() {
   const userFriends = useAppSelector(
     (state: RootState) => state.profileSlicer.userFriends
   );
-
+  console.log(">>>>>>>>", userFriends);
   //todo редактирование имени пользователя
 
   const [editName, setEditName] = useState(false) as [

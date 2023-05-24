@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./Board.css";
 import Chessboard from "chessboardjsx";
 import { Chess, Square } from "chess.js";
 import { useAppDispatch } from "../../../redux/typesRedux";
@@ -27,7 +28,6 @@ function Board({ socket }: any) {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
       socket.emit("reconnect", userFromBack);
-
     });
 
     socket.on("reconnect", (roomObject: any) => {
@@ -176,36 +176,48 @@ function Board({ socket }: any) {
   };
 
   return (
-    <div>
-      <Chessboard
-        position={position}
-        onDrop={handleMove}
-        onSquareClick={handlePieceClick}
-        squareStyles={{
-          ...(selectedSquare && {
-            [selectedSquare]: { backgroundColor: "#7b61ff" },
-          }),
-          ...highlightedSquares.reduce(
-            (obj, square) => ({
-              ...obj,
-              [square]: { backgroundColor: "#7b61ff", opacity: "0.5" },
+    <div className="game-container">
+      <div className="board-container">
+        <Chessboard
+          position={position}
+          onDrop={handleMove}
+          // allowDrag={function (obj) {
+          //   setHighlightedSquares(chess.moves({ square: obj.sourceSquare }));
+          //   return true;
+          // }}
+          onSquareClick={handlePieceClick}
+          squareStyles={{
+            ...(selectedSquare && {
+              [selectedSquare]: { backgroundColor: "#7b61ff" },
             }),
-            {}
-          ),
-        }}
-        orientation={playerColor}
-        width={600}
-        darkSquareStyle={{ backgroundColor: "#B7C0D8" }}
-        lightSquareStyle={{ backgroundColor: "#E8EDF9" }}
-        draggable={isPlayersMove}
-        dropOffBoard="snapback"
-        transitionDuration={10}
-      />
+            ...highlightedSquares.reduce(
+              (obj, square) => ({
+                ...obj,
+                [square]: { backgroundColor: "#7b61ff", opacity: "0.5" },
+              }),
+              {}
+            ),
+          }}
+          orientation={playerColor}
+          width={600}
+          darkSquareStyle={{ backgroundColor: "#B7C0D8" }}
+          lightSquareStyle={{ backgroundColor: "#E8EDF9" }}
+          draggable={isPlayersMove}
+          dropOffBoard="snapback"
+          transitionDuration={10}
+        />
+      </div>
       <div>
-        <button onClick={handleCreateRoom}>Create Room</button>
-        <button onClick={handleJoinRoom}>Join Room</button>
-        <button onClick={handleLog}>LOG</button>
-        <input value={room} readOnly />
+        <div className="game-button-container">
+          <button onClick={handleCreateRoom} style={{ marginLeft: "10px" }}>
+            Create Room
+          </button>
+          <button onClick={handleJoinRoom} style={{ marginLeft: "30px" }}>
+            Join Room
+          </button>
+        </div>
+        {/* <button onClick={handleLog}>LOG</button> */}
+        <input className="room-id-container" value={room} readOnly />
       </div>
     </div>
   );

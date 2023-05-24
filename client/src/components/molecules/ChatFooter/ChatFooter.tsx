@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./ChatFooter.css";
 
 import { useAppDispatch } from "../../../redux/typesRedux";
 import { getUser } from "../../../redux/thunk/auth/getUser";
@@ -21,12 +22,15 @@ function ChatFooter({ socket, messages, setMessages }: any) {
       id: `${userFromBack.id}`,
       socketID: socket.id,
     });
-    setMessages((value: any) => [...value, {
+    setMessages((value: any) => [
+      ...value,
+      {
         text: message,
         name: "You",
         id: `${userFromBack.id}`,
         socketID: socket.id,
-      }]);
+      },
+    ]);
     setMessage("");
   };
   return (
