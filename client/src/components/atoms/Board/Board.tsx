@@ -20,28 +20,33 @@ function Board({ socket }: any) {
   const [oponentName, setOponentName] = useState("");
   const [gameStart, setStartGame] = useState(false);
   const [gameOver, setGameOver] = useState("none");
-  const [gameOverText, setGameOverText] = useState<'win' | 'draw' | 'lose'>('lose');
+  const [gameOverText, setGameOverText] = useState<
+    "You win" | "Draw" | "You lose"
+  >("You lose");
   const [once, setOnce] = useState(false);
 
   const dispatch = useAppDispatch();
 
   function PlayerMove() {
-    return gameStart && !chess.isGameOver() && chess.turn() === playerColor.charAt(0)
+    return (
+      gameStart && !chess.isGameOver() && chess.turn() === playerColor.charAt(0)
+    );
   }
-
 
   useEffect(() => {
     if (once) return;
 
     function CheckGameOver(chess: Chess, playerColor: string) {
       if (chess.isGameOver()) {
-        setGameOver('');
+        setGameOver("");
 
         if (chess.isCheckmate()) {
           setStartGame(false);
-          setGameOverText(chess.turn() === playerColor ? 'lose' : 'win');
+          setGameOverText(
+            chess.turn() === playerColor ? "You lose" : "You win"
+          );
         } else if (chess.isDraw()) {
-          setGameOverText('draw');
+          setGameOverText("Draw");
         }
       }
     }
@@ -65,9 +70,9 @@ function Board({ socket }: any) {
 
       setRoom(roomObject.roomId);
       setPlayerColor(roomObject.playerColor === "w" ? "white" : "black");
-      console.log(`=========== ${chess.isGameOver()}`)
+      console.log(`=========== ${chess.isGameOver()}`);
       CheckGameOver(chess, roomObject.playerColor.charAt(0));
-      setOponentName(roomObject.oponentName)
+      setOponentName(roomObject.oponentName);
       setStartGame(roomObject.gameStart);
     });
 
@@ -84,7 +89,7 @@ function Board({ socket }: any) {
         if (chess.move(move)) {
           setPosition(chess.fen());
         } else {
-          throw new Error('invalid move');
+          throw new Error("invalid move");
         }
       } catch (error) {
         const response = await dispatch(getUser());
@@ -95,11 +100,11 @@ function Board({ socket }: any) {
     });
 
     socket.on("playerJoin", (player: any) => {
-      setOponentName(player.user_name)
+      setOponentName(player.user_name);
     });
 
     socket.on("playerDisconnect", (player: any) => {
-      setOponentName("")
+      setOponentName("");
     });
 
     socket.on("gameStart", () => {
@@ -113,12 +118,14 @@ function Board({ socket }: any) {
       const response = await dispatch(getUser());
       const userFromBack = response.payload;
       setPosition(chess.fen());
-      setGameOver('');
+      setGameOver("");
       if (chess.isCheckmate()) {
         setStartGame(false);
-        setGameOverText(obj.winner === userFromBack.id ? 'win' : 'lose');
+        setGameOverText(
+          obj.winner === userFromBack.id ? "You win" : "You lose"
+        );
       } else if (chess.isDraw()) {
-        setGameOverText('draw');
+        setGameOverText("Draw");
       }
     });
     // return () => {
@@ -142,8 +149,8 @@ function Board({ socket }: any) {
           chess.reset();
           setPosition(chess.fen());
           setRoom(currentRoomID);
-          setGameOver('none');
-          setOponentName('');
+          setGameOver("none");
+          setOponentName("");
           // const isFirstMove = createdRoom.player1.color === "w";
           // setIsPlayersMove(isFirstMove);
         }
@@ -162,13 +169,18 @@ function Board({ socket }: any) {
         "join-room",
         roomId,
         userFromBack,
-        (success: boolean, board: string, firstMoveCheck: boolean, oponentName: string) => {
+        (
+          success: boolean,
+          board: string,
+          firstMoveCheck: boolean,
+          oponentName: string
+        ) => {
           if (success) {
             chess.load(board);
             setPosition(board);
             setRoom(roomId);
-            setGameOver('none');
-            setOponentName(oponentName)
+            setGameOver("none");
+            setOponentName(oponentName);
             firstMoveCheck ? setPlayerColor("white") : setPlayerColor("black");
           } else {
             alert("Failed to join the room");
@@ -237,14 +249,18 @@ function Board({ socket }: any) {
       inputRef.current.select();
       document.execCommand("copy");
     }
-  }
+  };
 
   const handleDrag = (square: any) => {
-    return PlayerMove() && square.piece.charAt(0) === playerColor.charAt(0)
-  }
+    return PlayerMove() && square.piece.charAt(0) === playerColor.charAt(0);
+  };
 
   return (
     <div className="game-container">
+      <div className="room-id-container">
+        <h2>Opponent: {oponentName}</h2>
+        {/* <div>{oponentName}</div> */}
+      </div>
       <div className="board-container">
         <Chessboard
           position={position}
@@ -272,32 +288,53 @@ function Board({ socket }: any) {
           transitionDuration={10}
         />
       </div>
-      <div>
+      <div className="interface-container">
         <div className="game-button-container">
           <button onClick={handleCreateRoom} style={{ marginLeft: "10px" }}>
-            Create Room
+            {gameOver === "" ? (
+              <span>Restart room</span>
+            ) : (
+              <span>Create Room</span>
+            )}
           </button>
           <button onClick={handleJoinRoom} style={{ marginLeft: "30px" }}>
             Join Room
           </button>
         </div>
         {/* <button onClick={handleLog}>LOG</button> */}
-        <input ref={inputRef} className="room-id-container" value={room} onClick={handleInputClick} readOnly />
-        <div style={{ display: gameOver }} className="room-id-container">
+
+        <input
+          ref={inputRef}
+          className="room-id-container"
+          name="roomId"
+          value={room}
+          onClick={handleInputClick}
+          readOnly
+        />
+
+        {/* <div style={{ display: gameOver }} className="room-id-container">
           {gameOverText}
-        </div>
-        <div style={{ display: gameStart ? '' : 'none' }} className="room-id-container">
+        </div> */}
+        {/* <div style={{ display: gameStart ? '' : 'none' }} className="room-id-container">
           {playerColor}
-        </div>
-        <div style={{ display: PlayerMove() ? '' : 'none' }} className="room-id-container">
-          You turn
-        </div>
-        <div className="room-id-container">
-          You oponent
-          <div>
-            {oponentName}
+        </div> */}
+
+        {oponentName === "" ? (
+          ""
+        ) : (
+          <div
+            className="turn-indicator"
+            style={{ backgroundColor: PlayerMove() ? "#b9e0b9" : "#f38282" }}
+          >
+            {gameOver === "" ? (
+              <span>{gameOverText}</span>
+            ) : PlayerMove() ? (
+              <span>Your turn</span>
+            ) : (
+              <span>{oponentName}`s turn</span>
+            )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

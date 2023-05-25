@@ -1,10 +1,13 @@
 .chat-body {
-  width: 97.5% !important;
+  width: 417px !important;
+  overflow: hidden !important;
+  /* overflow-y: scroll !important; */
+  border-top-right-radius: 10px;
 }
 
 .message__container {
   overflow: hidden !important;
   overflow-y: scroll !important;
-  height: 58vh !important;
+  height: 500px !important;
   width: 100% !important;
 }

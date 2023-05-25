@@ -241,13 +241,17 @@ export default function MainProfilePage() {
                   <p>Rating: {friend.user_rating}</p>
                 </div>
               </Link>
-              <button
-                className="btn-edit-user"
-                style={{ margin: "7px 0px 0px 0px" }}
-                onClick={() => delFriendHandler(friend.id)}
-              >
-                <img alt="cancel" src="/assets/profilePage/cancel-icon.svg" />
-              </button>
+              {user.id !== profileOwner.id ? (
+                ""
+              ) : (
+                <button
+                  className="btn-edit-user"
+                  style={{ margin: "7px 0px 0px 0px" }}
+                  onClick={() => delFriendHandler(friend.id)}
+                >
+                  <img alt="cancel" src="/assets/profilePage/cancel-icon.svg" />
+                </button>
+              )}
             </li>
           ))}
         </div>

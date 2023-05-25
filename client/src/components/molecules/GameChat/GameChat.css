@@ -5,11 +5,12 @@
   background-color: #e8edf9;
   padding: 10px;
   padding-bottom: 100px;
-  height: 90% !important;
+  height: 65% !important;
+  width: 300px;
 }
 
 .chat__main {
-  width: 80%;
+  width: 400px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }

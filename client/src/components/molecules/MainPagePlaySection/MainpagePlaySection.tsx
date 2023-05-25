@@ -19,7 +19,7 @@ function MainPlaySection() {
       <div className="text-buttons-wrapper-main">
         <div className="text-wrapper">
           <h1>Play Chess Online</h1>
-          <p>Choose a game mode:</p>
+          {/* <p>Choose a game mode:</p> */}
         </div>
         <div className="buttons-wrapper">
           <Button
@@ -31,14 +31,14 @@ function MainPlaySection() {
             className="play-online"
             onClick={() => navigate("/game")}
           />
-          <Button
+          {/* <Button
             text="Play Computer"
             p="Play vs customizable training bots"
             icon="/assets/bot.png"
             width="300px"
             height="100px"
             className="play-bot"
-          />
+          /> */}
         </div>
       </div>
     </div>
