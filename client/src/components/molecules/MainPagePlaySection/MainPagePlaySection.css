@@ -8,7 +8,7 @@
   border: 2px solid grey;
   border-radius: 20px;
   margin: 50px 40px;
-  /* flex: 1; */
+  background-color: #c6ccdb;
 }
 
 .image-wrapper {

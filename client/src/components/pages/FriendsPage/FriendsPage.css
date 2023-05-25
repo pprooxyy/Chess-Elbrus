@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   background-color: #e8edf9;
-  height: 200vh;
+  height: 200vh !important;
 }
 
 .text-buttons-wrapper-main {

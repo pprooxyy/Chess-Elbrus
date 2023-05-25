@@ -32,7 +32,6 @@
   font-size: 65px;
 }
 
-
 button {
   width: 150px;
   height: 40px;
@@ -48,7 +47,6 @@ button {
   width: 200px;
   height: 10px;
 }
-
 
 .friend-container {
   display: flex;
@@ -90,10 +88,13 @@ button {
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 110px;
+  border-radius: 10px;
 }
 
 .friend-input {
   width: 250px;
+  height: 35px;
   padding: 5px;
   margin-right: 10px;
   background-color: #d5d6d8;
@@ -114,14 +115,15 @@ button {
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  height: 50px;
 }
 
 .puzzle-content-wrapper {
   display: flex;
   background-color: #b7c0d8;
-  border-radius: 40px;
+  border-radius: 10px;
   width: 600px;
-  box-shadow: 2px 2px 13px 2px rgba(0, 0, 0, 0.36);
+  box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.36);
   justify-content: space-around;
 }
 
@@ -136,14 +138,14 @@ button {
 }
 
 .avatar {
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  border-radius: 5%;
+  width: 130px;
+  /* height: 80px; */
 }
 
 .friend-cards {
   display: flex;
-  justify-content:space-around;
+  justify-content: space-around;
   padding: 10px;
   flex-wrap: wrap;
   align-items: center;
@@ -152,6 +154,8 @@ button {
 }
 
 .friend-card {
+  width: 150px;
+  height: 250px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -160,10 +164,9 @@ button {
   gap: 5px;
   background-color: #b7c0d8;
   padding: 15px;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 2px 2px 13px 2px rgba(0, 0, 0, 0.36);
-  border-radius: 15px;
-  box-shadow: 2px 2px 13px 2px rgba(0, 0, 0, 0.36);
+
   transition: transform 0.3s ease;
 }
 
