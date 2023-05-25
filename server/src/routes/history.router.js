@@ -15,13 +15,16 @@ const getNameById = async (userId) => {
   }
 };
 
-const calculateDuration = (startTime, endTime) => {
-  const start = new Date(startTime);
-  const end = new Date(endTime);
-  const durationInMilliseconds = end - start;
-  const durationInMinutes = Math.floor(durationInMilliseconds / 1000 / 60);
+const calculateDuration = (startTime = new Date(), endTime = new Date()) => {
+  const time = new Date(endTime - startTime);
 
-  return durationInMinutes;
+  time.setHours(time.getHours() + (new Date().getTimezoneOffset() / 60));
+
+  const seconds = `0${time.getSeconds()}`.slice(-2);
+  const minutes = `0${time.getMinutes()}`.slice(-2);
+  const hours = time.getHours();
+
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 router.get('/', async (req, res) => {
